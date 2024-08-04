@@ -42,15 +42,15 @@ public slots:
     void addQuote(SingleQuoteModel* data);
     void deleteQuote(SingleQuoteModel* data);
     void addOwner(std::pair<QString, QString>);
-    void updateQuote(SingleQuoteModel* changed, SingleQuoteModel* original);
-
+    void updateQuote(SingleQuoteModel *changed, SingleQuoteModel *original);
 
 private:
     std::shared_ptr<QuotesApi> _api;
     QString _accessToken;
     uint _lifetime;
-    QTimer* _authTimer;
+    QTimer *_authTimer;
 
+    void waitAnswer(QNetworkReply *reply);
     void auth();
 };
 

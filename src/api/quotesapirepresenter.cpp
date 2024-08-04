@@ -34,9 +34,7 @@ void QuotesApiRepresenter::getCoreTable(QuotesApi::CoreTables ct)
 
     QNetworkReply* reply = _api->getCoreTable(ct);
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) {qDebug() << "getCoreTable fucked up" << reply->errorString() << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute); throw QException(); }
 
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
@@ -73,9 +71,7 @@ QString QuotesApiRepresenter::addUser(User *user)
     qDebug() << "QuotesApiRepresenter::addUser, user: " << user->username() << user->passwd();
     QNetworkReply* reply = _api->addUser(user);
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
 
     QByteArray responseBytes = reply->readAll();
 
@@ -92,9 +88,7 @@ void QuotesApiRepresenter::getQuoteCards(const QString &owner)
 {
     QNetworkReply* reply = _api->getQuoteCards(owner);
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) throw QException();
 
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
@@ -119,9 +113,7 @@ void QuotesApiRepresenter::getFavouriteCards()
 {
     QNetworkReply* reply = _api->getFavouriteCards();
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) throw QException();
 
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
@@ -146,9 +138,7 @@ void QuotesApiRepresenter::addFavorite(SingleQuoteModel* quote)
 {
     QNetworkReply* reply = _api->addFavouriteCard(quote);
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) emit sendIfQuoteAddedToCollection(false);
 
     QByteArray responseBytes = reply->readAll();
@@ -167,9 +157,7 @@ void QuotesApiRepresenter::addQuote(SingleQuoteModel *data)
     qDebug() << "QuotesApiRepresenter::addQuote";
     QNetworkReply* reply = _api->addQuote(data);
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) {emit sendIfQuoteAddedResponse(false); return;}
 
     QByteArray responseBytes = reply->readAll();
@@ -188,9 +176,7 @@ void QuotesApiRepresenter::deleteQuote(SingleQuoteModel *data)
     qDebug() << "QuotesApiRepresenter::deleteQuote";
     QNetworkReply* reply = _api->deleteQuote(data->id());
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) {emit sendIfQuoteDeletedResponse(false); return;}
 
     QByteArray responseBytes = reply->readAll();
@@ -208,9 +194,7 @@ void QuotesApiRepresenter::addOwner(std::pair<QString, QString> owner)
 {
     QNetworkReply* reply = _api->addOwner(owner);
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) {emit sendIfOwnerAddedResponse(false); return;}
 
     QByteArray responseBytes = reply->readAll();
@@ -228,9 +212,7 @@ void QuotesApiRepresenter::updateQuote(SingleQuoteModel* changed, SingleQuoteMod
 {
     QNetworkReply* reply = _api->updateQuote(changed, original);
 
-    QEventLoop loop(this);
-    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
+    waitAnswer(reply);
     if (reply->error() != QNetworkReply::NoError) {emit sendIfQuoteUpdatedResponse("Some error"); return;}
 
     QByteArray responseBytes = reply->readAll();
@@ -242,4 +224,11 @@ void QuotesApiRepresenter::updateQuote(SingleQuoteModel* changed, SingleQuoteMod
     delete reply;
 
     emit sendIfQuoteUpdatedResponse(success);
+}
+
+void QuotesApiRepresenter::waitAnswer(QNetworkReply *reply)
+{
+    QEventLoop loop(this);
+    QAbstractSocket::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
 }

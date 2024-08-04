@@ -39,7 +39,13 @@ private:
     QNetworkAccessManager* _manager;
     QString _accessToken;
 
-    //QNetworkRequest buildRequest(QString mapping);
+    // internal use only
+    #define POST_REQUEST_AUTHED                                                         \
+        QNetworkRequest quoteRequest;                                                   \
+        QString bearerToken = "Bearer " + _accessToken;                                 \
+        quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());          \
+        quoteRequest.setUrl(QUrl(_source + mapping));                                   \
+        quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");     
 };
 
 #endif // QUOTESAPI_H

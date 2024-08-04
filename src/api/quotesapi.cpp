@@ -91,15 +91,9 @@ QNetworkReply *QuotesApi::addUser(User* user)
 QNetworkReply *QuotesApi::addQuote(SingleQuoteModel *data)
 {
     QString mapping = "/inside/add-quote";
-    QNetworkRequest quoteRequest;
 
-    QString bearerToken = "Bearer " + _accessToken;
-    quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());
-
-    quoteRequest.setUrl(QUrl(_source + mapping));
-
-    quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
+    POST_REQUEST_AUTHED
+    
     QJsonDocument doc = data->serializeToQJsonDocument();
 
     QByteArray jsonQuote = doc.toJson();
@@ -115,15 +109,7 @@ QNetworkReply *QuotesApi::addOwner(std::pair<QString, QString> owner)
 {
     QString mapping = "/inside/add-owner";
 
-    QUrl url(_source + mapping);
-    QNetworkRequest ownerRequest;
-
-    ownerRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    QString bearerToken = "Bearer " + _accessToken;
-    ownerRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());
-
-    ownerRequest.setUrl(url);
+    POST_REQUEST_AUTHED
     QJsonObject json
         {
             {"owner", owner.first},
@@ -133,7 +119,7 @@ QNetworkReply *QuotesApi::addOwner(std::pair<QString, QString> owner)
     QJsonDocument doc(json);
     QByteArray jsonOwner = doc.toJson();
 
-    QNetworkReply* reply = _manager->post(ownerRequest, jsonOwner);
+    QNetworkReply* reply = _manager->post(quoteRequest, jsonOwner);
     return reply;
 }
 
@@ -147,27 +133,20 @@ QNetworkReply *QuotesApi::updateQuote(SingleQuoteModel* changed, SingleQuoteMode
                         (changed->quote() != original->quote()) ||
                         (changed->owner() != original->owner());
 
-    qDebug() << changed->is_obscene() << original->is_obscene() <<
-                changed->quote() << original->quote() <<
-                changed->owner() << original->owner() <<
-                changed->id() << original->id() <<
-                changed->cites() << original->cites();
+    // qDebug() << changed->is_obscene() << original->is_obscene() <<
+    //             changed->quote() << original->quote() <<
+    //             changed->owner() << original->owner() <<
+    //             changed->id() << original->id() <<
+    //             changed->cites() << original->cites();
 
-    qDebug() << (changed->is_obscene() != original->is_obscene()) <<
-                (changed->quote() != original->quote()) <<
-                (changed->owner() != original->owner()) <<
-                (changed->id() == original->id()) <<
-                (changed->cites() == original->cites());
+    // qDebug() << (changed->is_obscene() != original->is_obscene()) <<
+    //             (changed->quote() != original->quote()) <<
+    //             (changed->owner() != original->owner()) <<
+    //             (changed->id() == original->id()) <<
+    //             (changed->cites() == original->cites());
 
     QString mapping = "/inside/update-quote";
-    QNetworkRequest quoteRequest;
-
-    QString bearerToken = "Bearer " + _accessToken;
-    quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());
-
-    quoteRequest.setUrl(QUrl(_source + mapping));
-
-    quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    POST_REQUEST_AUTHED
 
     QJsonObject body
         {
