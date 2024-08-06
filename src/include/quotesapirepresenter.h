@@ -12,13 +12,19 @@ class QuotesApiRepresenter: public QObject
     Q_OBJECT
 
 public:
-    QuotesApiRepresenter(std::shared_ptr<QuotesApi> _api);
+    QuotesApiRepresenter();
+    QuotesApiRepresenter(std::shared_ptr<Connection> conn, std::shared_ptr<User> user);
     ~QuotesApiRepresenter();
 
-    bool authed();
-    QString addUser(User*);
+public slots:
+    void tryAuthenticate(std::shared_ptr<User> user, std::shared_ptr<Connection> conn);
+    void addUser(User*);
 
 signals:
+    void authenticated();
+    void forbidden();
+    void addedUserAnswer(QString);
+
     void sendOwnersValues(QStringList*);
     void sendAttrsValues(QStringList*);
     void sendFeaturesValues(QStringList*);
@@ -45,13 +51,13 @@ public slots:
     void updateQuote(SingleQuoteModel *changed, SingleQuoteModel *original);
 
 private:
-    std::shared_ptr<QuotesApi> _api;
+    std::unique_ptr<QuotesApi> _api;
     QString _accessToken;
     uint _lifetime;
     QTimer *_authTimer;
 
     void waitAnswer(QNetworkReply *reply);
-    void auth();
+    void auth(std::shared_ptr<User> user, std::shared_ptr<Connection> conn);
 };
 
 #endif // QUOTESAPIREPRESENTER_H

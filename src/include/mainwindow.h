@@ -5,6 +5,7 @@
 #include "user.h"
 #include <QMainWindow>
 #include <QLayout>
+#include "quotesapirepresenter.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,20 +21,25 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    //void onLoginClick();
 public slots:
     void startForm();
     void authorization();
     void createNewUser(QString, QString);
     void registerForm();
 
+    void login();
+    void forbid();
+    void checkAddedUser(QString);
 
+signals:
+    void pleaseAuthenticateRequest(std::shared_ptr<User> user, std::shared_ptr<Connection> conn);
+    void pleaseRegisterNewUserRequest(User*);
 
 private:
     Ui::MainWindow *ui;
     QWidget *widget;
-    //QLayout *layout;
-    //QStackedWidget *stack;
+
+    std::shared_ptr<QuotesApiRepresenter> _apiRepresenter;
 
     std::shared_ptr<Connection> _conn;
     std::shared_ptr<User> _user;

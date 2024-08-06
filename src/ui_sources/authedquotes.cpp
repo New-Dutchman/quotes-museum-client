@@ -10,14 +10,14 @@
 #include <QInputDialog>
 #include <QScrollBar>
 
-AuthedQuotes::AuthedQuotes(std::shared_ptr<Connection> _conn, std::shared_ptr<User> _user, QWidget *parent)
+AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, QString username, QWidget *parent)
     : QTabWidget(parent)
     , ui(new Ui::AuthedQuotes)
+    , _quotesApi(apiPresenter)
 {
-    _quotesApi = std::shared_ptr<QuotesApiRepresenter>(new QuotesApiRepresenter(std::make_shared<QuotesApi>(_conn, _user)));
     ui->setupUi(this);
 
-    if (_user->username() == "John Doe")
+    if (username == "John Doe")
     {
         ui->userTab->setDisabled(true);
         ui->logoutBtn->setDisabled(false);
@@ -33,7 +33,7 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<Connection> _conn, std::shared_ptr<Us
     connect(this, &AuthedQuotes::destroyed, _apiThread, &QThread::quit);
     //connect(_apiThread, &QThread::finished, _apiThread, &QThread::deleteLater);
 
-    ui->usernameLabel->setText(_user->username());
+    ui->usernameLabel->setText(username);
 
     QObject::connect(ui->logoutBtn, &QPushButton::clicked, (MainWindow*)parent, &MainWindow::startForm);
 

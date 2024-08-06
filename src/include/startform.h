@@ -17,7 +17,7 @@ public:
     explicit StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> conn, QWidget *parent = nullptr);
     ~StartForm();
 
-    void setText();
+    // void setText();
 
 private:
     Ui::StartForm *ui;
@@ -29,6 +29,8 @@ private slots:
     void defaultUserChecked();
     void defaultConnectionChecked();
 
+signals:
+    void loginRequest();
 };
 
 #endif // STARTFORM_H
