@@ -43,7 +43,5 @@ private:
 
     std::shared_ptr<Connection> _conn;
     std::shared_ptr<User> _user;
-
-    void authed();
 };
 #endif // MAINWINDOW_H

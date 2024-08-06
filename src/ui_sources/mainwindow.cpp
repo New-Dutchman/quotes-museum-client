@@ -57,11 +57,6 @@ void MainWindow::forbid()
 
 void MainWindow::login()
 {
-    authed();   
-}
-
-void MainWindow::authed()
-{
     qDebug() << "MainWindow::authed";
     ui-> verticalLayout->removeWidget(widget);
     delete(widget);
