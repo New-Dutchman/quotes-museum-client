@@ -22,17 +22,9 @@ file(GLOB_RECURSE PROJECT_FILES
     "${CMAKE_SOURCE_DIR}/src/*.ui"
 )
 
-# file(GLOB_RECURSE FORMS
-#     "${CMAKE_SOURCE_DIR}/src/*.ui"
-# )
-
 include_directories(${CMAKE_SOURCE_DIR}/src/include)
-#include_directories(${CMAKE_SOURCE_DIR}/src/ui_sources)
-
 
 qt_standard_project_setup()
-
-# qt_wrap_ui(UI_SOURCES ${FORMS})
 
 qt_add_executable(databaseUI WIN32 MACOSX_BUNDLE
     ${PROJECT_FILES}

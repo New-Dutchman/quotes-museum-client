@@ -9,18 +9,14 @@
 #include <QJsonArray>
 #include <chrono>
 
-QuotesApiRepresenter::QuotesApiRepresenter(std::shared_ptr<QuotesApi> api):
-    _api(api)
+QuotesApiRepresenter::QuotesApiRepresenter(): QObject(nullptr)
 {
-    qDebug() << "QuotesApiRepresenter::QuotesApiRepresenter";
-    _api->setParent(this);
     _authTimer = new QTimer(this);
+}
 
-    connect(_authTimer, &QTimer::timeout, this, &QuotesApiRepresenter::auth);
-    auth();
+QuotesApiRepresenter::QuotesApiRepresenter(std::shared_ptr<Connection> conn, std::shared_ptr<User> user)
+{
 
-    _authTimer->start(std::chrono::milliseconds(_lifetime - _lifetime / 10));
-    qDebug() << _authTimer->interval();
 }
 
 QuotesApiRepresenter::~QuotesApiRepresenter()
@@ -55,17 +51,29 @@ void QuotesApiRepresenter::getCoreTable(QuotesApi::CoreTables ct)
     }
 }
 
-void QuotesApiRepresenter::auth()
-{
-    _lifetime = _api->auth();
+void QuotesApiRepresenter::auth(std::shared_ptr<User> user, std::shared_ptr<Connection> conn)
+{   
+    _api = std::make_unique<QuotesApi>(conn, user);
+    qDebug() << "QuotesApiRepresenter::QuotesApiRepresenter";
+    _api->setParent(this);
+
+    connect(_authTimer, &QTimer::timeout, _api.get(), &QuotesApi::authenticate);
+    _lifetime = _api->authenticate();
+
+    _authTimer->start(std::chrono::milliseconds(_lifetime - _lifetime / 10));
+    qDebug() << _authTimer->interval();
 }
 
-bool QuotesApiRepresenter::authed()
+void QuotesApiRepresenter::tryAuthenticate(std::shared_ptr<User> user, std::shared_ptr<Connection> conn)
 {
-    return _lifetime != 0;
+    auth(user, conn);
+
+    if (_lifetime != 0)
+        emit authenticated();
+    else emit forbidden();
 }
 
-QString QuotesApiRepresenter::addUser(User *user)
+void QuotesApiRepresenter::addUser(User* user)
 {
 
     qDebug() << "QuotesApiRepresenter::addUser, user: " << user->username() << user->passwd();
@@ -81,7 +89,7 @@ QString QuotesApiRepresenter::addUser(User *user)
 
     delete reply;
 
-    return success;
+    emit addedUserAnswer(success);
 }
 
 void QuotesApiRepresenter::getQuoteCards(const QString &owner)

@@ -4,7 +4,6 @@
 #include <QTabWidget>
 #include <QThread>
 
-
 #include "quotesapirepresenter.h"
 
 namespace Ui {
@@ -16,7 +15,7 @@ class AuthedQuotes : public QTabWidget
     Q_OBJECT
 
 public:
-    explicit AuthedQuotes(std::shared_ptr<Connection> _conn, std::shared_ptr<User> _user, QWidget *parent = nullptr);
+    explicit AuthedQuotes(std::shared_ptr<QuotesApiRepresenter>, QString username, QWidget *parent = nullptr);
 
     ~AuthedQuotes();
 
@@ -69,7 +68,6 @@ private:
     QStringList* _owners;
     QStringList* _attrs;
     QStringList* _features;
-    //QuotesApiRepresenter* _quotesApi;
 };
 
 #endif // AUTHEDQUOTES_H

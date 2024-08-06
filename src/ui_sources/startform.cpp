@@ -12,7 +12,7 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
     ui->defaultServerCheckBox->setLayoutDirection(Qt::RightToLeft);
 
     QObject::connect(ui->loginBtn, &QPushButton::clicked, this, &StartForm::onLoginClick);
-    QObject::connect(ui->loginBtn, &QPushButton::clicked, (MainWindow*)this->parent(), &MainWindow::authorization);
+    QObject::connect(this, &StartForm::loginRequest, (MainWindow*)this->parent(), &MainWindow::authorization);
 
     QObject::connect(ui->registerBtn, &QPushButton::clicked, (MainWindow*)this->parent(), &MainWindow::registerForm);
 
@@ -38,6 +38,7 @@ void StartForm::onLoginClick()
     _conn->port(ui->portLE->text().toInt());
     _conn->server(ui->hostnameLE->text());
 
+    emit loginRequest();
 }
 
 void StartForm::defaultUserChecked()

@@ -1,13 +1,13 @@
 #ifndef QUOTESAPI_H
 #define QUOTESAPI_H
 
+#include <QObject>
+
 #include "qurl.h"
 #include <QString>
 #include <QNetworkAccessManager>
 
-#include "connection.h"
-#include "singlequotemodel.h"
-#include "user.h"
+#include "quoteslogapi.h"
 
 class QuotesApi: public QObject
 {
@@ -15,36 +15,31 @@ class QuotesApi: public QObject
 
 public:
     QuotesApi(std::shared_ptr<Connection> _conn, std::shared_ptr<User> _user);
-    virtual ~QuotesApi();
+    ~QuotesApi();
 
     enum CoreTables{owners, attrs, features};
-
-    int auth();
 
     QNetworkReply* getCoreTable(CoreTables);
     QNetworkReply* getQuoteCards(QString);
     QNetworkReply* getFavouriteCards();
     QNetworkReply* addFavouriteCard(SingleQuoteModel* quote);
-    QNetworkReply* addUser(User *);
     QNetworkReply* addQuote(SingleQuoteModel* data);
     QNetworkReply* deleteQuote(int id);
     QNetworkReply* addOwner(std::pair<QString, QString>);
     QNetworkReply* updateQuote(SingleQuoteModel* changed, SingleQuoteModel* original);
 
-private:
-    QString _source;
-    std::shared_ptr<Connection> _conn;
-    std::shared_ptr<User> _user;
+    inline int authenticate() {return _authentificate->auth(); };
+    inline QNetworkReply* addUser(User * user) {return _authentificate->addUser(user); };
 
-    QNetworkAccessManager* _manager;
-    QString _accessToken;
+private:
+    QuotesLogApi* _authentificate;
 
     // internal use only
     #define POST_REQUEST_AUTHED                                                         \
         QNetworkRequest quoteRequest;                                                   \
-        QString bearerToken = "Bearer " + _accessToken;                                 \
+        QString bearerToken = "Bearer " + _authentificate->_accessToken;                                 \
         quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());          \
-        quoteRequest.setUrl(QUrl(_source + mapping));                                   \
+        quoteRequest.setUrl(QUrl(_authentificate->_source + mapping));                                   \
         quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");     
 };
 
