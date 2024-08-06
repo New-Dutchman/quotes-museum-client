@@ -67,10 +67,8 @@ void QuotesApiRepresenter::auth(std::shared_ptr<User> user, std::shared_ptr<Conn
 void QuotesApiRepresenter::tryAuthenticate(std::shared_ptr<User> user, std::shared_ptr<Connection> conn)
 {
     auth(user, conn);
-
-    if (_lifetime != 0)
-        emit authenticated();
-    else emit forbidden();
+    
+    _lifetime != 0? emit authenticated() : emit forbidden();
 }
 
 void QuotesApiRepresenter::addUser(User* user)

@@ -17,14 +17,6 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 {
     ui->setupUi(this);
 
-    if (username == "John Doe")
-    {
-        ui->userTab->setDisabled(true);
-        ui->logoutBtn->setDisabled(false);
-        //this->removeTab(0);
-        this->setCurrentIndex(1);
-    }
-
     ui->homepageScrollArea->horizontalScrollBar()->setEnabled(false);
     ui->quotesScrollArea->horizontalScrollBar()->setEnabled(false);
 
@@ -76,6 +68,14 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 
     _quotesApi->moveToThread(_apiThread);
     _apiThread->start();
+
+    if (username == "John Doe")
+    {
+        ui->userTab->setDisabled(true);
+        ui->logoutBtn->setDisabled(false);
+        //this->removeTab(0);
+        this->setCurrentIndex(1);
+    } else emit _quotesApi->getFavouriteCards();
 
     getCoreTable(QuotesApi::CoreTables::features);
     getCoreTable(QuotesApi::CoreTables::attrs);

@@ -7,7 +7,6 @@
 #include <QNetworkRequest>
 #include <QUrlQuery>
 
-
 QuotesApi::QuotesApi(std::shared_ptr<Connection> conn, std::shared_ptr<User> user)
 {
     _authenticate = new QuotesLogApi(conn, user);
@@ -30,7 +29,7 @@ QNetworkReply *QuotesApi::addQuote(SingleQuoteModel *data)
     qDebug() << doc;
     qDebug() << jsonQuote;
 
-    QNetworkReply* reply = _manager.post(quoteRequest, jsonQuote);
+    QNetworkReply* reply = _authenticate->_manager->post(quoteRequest, jsonQuote);
 
     return reply;
 }
@@ -49,7 +48,7 @@ QNetworkReply *QuotesApi::addOwner(std::pair<QString, QString> owner)
     QJsonDocument doc(json);
     QByteArray jsonOwner = doc.toJson();
 
-    QNetworkReply* reply = _manager.post(quoteRequest, jsonOwner);
+    QNetworkReply* reply = _authenticate->_manager->post(quoteRequest, jsonOwner);
     return reply;
 }
 
@@ -89,7 +88,7 @@ QNetworkReply *QuotesApi::updateQuote(SingleQuoteModel* changed, SingleQuoteMode
     qDebug() << body;
     QByteArray jsonQuote = QJsonDocument(body).toJson();
 
-    QNetworkReply* reply = _manager.put(quoteRequest, jsonQuote);
+    QNetworkReply* reply = _authenticate->_manager->put(quoteRequest, jsonQuote);
 
     return reply;
 }
@@ -102,9 +101,9 @@ QNetworkReply *QuotesApi::deleteQuote(int id)
 
     QUrlQuery param;
     param.addQueryItem("id", QString::number(id));
-    quoteRequest.url().setQuery(param);
+    QURL_PARAM
 
-    QNetworkReply* reply = _manager.deleteResource(quoteRequest);
+    QNetworkReply* reply = _authenticate->_manager->deleteResource(quoteRequest);
 
     return reply;
 }
@@ -131,9 +130,9 @@ QNetworkReply *QuotesApi::getCoreTable(CoreTables ct)
 
     QUrlQuery param;
     param.addQueryItem("table", table);
-    quoteRequest.url().setQuery(param);
-
-    QNetworkReply* reply = _manager.get(quoteRequest);
+    QURL_PARAM
+    qDebug() << "getCore Table" << url.toString();
+    QNetworkReply* reply = _authenticate->_manager->get(quoteRequest);
 
     return reply;
 }
@@ -142,13 +141,12 @@ QNetworkReply *QuotesApi::getQuoteCards(QString owner)
 {
     QString mapping = "/quotes/owners";
     ANY_REQUEST_AUTHED_TEMPLATE
-    QNetworkRequest getTable;
 
     QUrlQuery param;
     param.addQueryItem("owner", owner);
-    quoteRequest.url().setQuery(param);
+    QURL_PARAM
 
-    QNetworkReply* reply = _manager.get(quoteRequest);
+    QNetworkReply* reply = _authenticate->_manager->get(quoteRequest);
 
     return reply;
 }
@@ -158,7 +156,7 @@ QNetworkReply *QuotesApi::getFavouriteCards()
     QString mapping = "/inside/fav-quotes";
     ANY_REQUEST_AUTHED_TEMPLATE
 
-    QNetworkReply* reply = _manager.get(quoteRequest);
+    QNetworkReply* reply = _authenticate->_manager->get(quoteRequest);
 
     return reply;
 }
@@ -174,7 +172,7 @@ QNetworkReply *QuotesApi::addFavouriteCard(SingleQuoteModel* quote)
     qDebug() << doc;
     qDebug() << jsonQuote;
 
-    QNetworkReply* reply = _manager.put(quoteRequest, jsonQuote);
+    QNetworkReply* reply = _authenticate->_manager->put(quoteRequest, jsonQuote);
 
     return reply;
 }
