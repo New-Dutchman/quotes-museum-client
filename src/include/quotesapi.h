@@ -34,12 +34,13 @@ public:
 private:
     QuotesLogApi* _authenticate;
 
+    QNetworkAccessManager& _manager = *_authenticate->_manager;
     // internal use only
-    #define POST_REQUEST_AUTHED                                                         \
+    #define ANY_REQUEST_AUTHED_TEMPLATE                                                 \
         QNetworkRequest quoteRequest;                                                   \
-        QString bearerToken = "Bearer " + _authenticate->_accessToken;                                 \
+        QString bearerToken = "Bearer " + _authenticate->_accessToken;                  \
         quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());          \
-        quoteRequest.setUrl(QUrl(_authenticate->_source + mapping));                                   \
+        quoteRequest.setUrl(QUrl(_authenticate->_source + mapping));                    \
         quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");     
 };
 
