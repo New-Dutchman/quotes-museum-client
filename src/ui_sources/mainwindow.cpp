@@ -42,7 +42,6 @@ void MainWindow::startForm()
 void MainWindow::authorization()
 {
     qDebug() << "MainWindow::authorization";
-    // _apiRepresenter = std::make_shared<QuotesApiRepresenter>(_conn, _user);
 
     emit pleaseAuthenticateRequest(_user, _conn);
 }

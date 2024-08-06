@@ -43,6 +43,6 @@ const QString User::DEFAULT_USERNAME = "John Doe";
 const QString User::DEFAULT_PASSWD = "password";
 
 
-const QString User::defaultPasswd() {return DEFAULT_PASSWD;}
+const QString User::defaultPasswd() {return DEFAULT_PASSWD; }
 
 const QString User::defaultUsername() {return DEFAULT_USERNAME; }

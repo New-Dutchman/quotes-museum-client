@@ -28,18 +28,18 @@ public:
     QNetworkReply* addOwner(std::pair<QString, QString>);
     QNetworkReply* updateQuote(SingleQuoteModel* changed, SingleQuoteModel* original);
 
-    inline int authenticate() {return _authentificate->auth(); };
-    inline QNetworkReply* addUser(User * user) {return _authentificate->addUser(user); };
+    inline int authenticate() {return _authenticate->auth(); };
+    inline QNetworkReply* addUser(User * user) {return _authenticate->addUser(user); };
 
 private:
-    QuotesLogApi* _authentificate;
+    QuotesLogApi* _authenticate;
 
     // internal use only
     #define POST_REQUEST_AUTHED                                                         \
         QNetworkRequest quoteRequest;                                                   \
-        QString bearerToken = "Bearer " + _authentificate->_accessToken;                                 \
+        QString bearerToken = "Bearer " + _authenticate->_accessToken;                                 \
         quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());          \
-        quoteRequest.setUrl(QUrl(_authentificate->_source + mapping));                                   \
+        quoteRequest.setUrl(QUrl(_authenticate->_source + mapping));                                   \
         quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");     
 };
 

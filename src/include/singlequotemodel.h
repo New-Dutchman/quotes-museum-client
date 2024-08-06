@@ -44,7 +44,6 @@ private:
     QList<QString>* _features;
     QMap<QString, QString>* _attrs;
     QString _owner;
-    // int _whoAdded; to be added in future
 };
 
 #endif // SINGLEQUOTEMODEL_H
