@@ -52,6 +52,7 @@ private:
     quoteRequest.setUrl(url);
 
 #define NO_BODY_REQUEST(METHOD)                                                     \
+    QURL_PARAM                                                                      \
     QNetworkReply* reply = _authenticate->_manager->METHOD(quoteRequest);           \
     return reply;                                                                   \
 }
