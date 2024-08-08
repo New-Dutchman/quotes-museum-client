@@ -137,6 +137,25 @@ QNetworkReply *QuotesApi::getCoreTable(CoreTables ct)
     return reply;
 }
 
+// API_METHOD(getCoreTable, "/quotes/core-table", CoreTables ct)
+//     QString table;
+//     switch(ct)
+//     {
+//     case CoreTables::attrs:
+//         table = "attrs"; break;
+
+//     case CoreTables::features:
+//         table = "features"; break;
+
+//     case CoreTables::owners:
+//         table = "owners"; break;
+//     }
+
+//     QUrlQuery param;
+//     param.addQueryItem("table", table);
+// QURL_PARAM
+// NO_BODY_REQUEST(get)
+
 QNetworkReply *QuotesApi::getQuoteCards(QString owner)
 {
     QString mapping = "/quotes/owners";

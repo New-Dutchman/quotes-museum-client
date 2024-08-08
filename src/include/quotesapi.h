@@ -35,18 +35,36 @@ private:
     QuotesLogApi* _authenticate;
 
     // #define _manager _authenticate->_manager
-    // internal use only
-    #define ANY_REQUEST_AUTHED_TEMPLATE                                                 \
-        QNetworkRequest quoteRequest;                                                   \
-        QString bearerToken = "Bearer " + _authenticate->_accessToken;                  \
-        quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());          \
-        quoteRequest.setUrl(QUrl(_authenticate->_source + mapping));                                                       \
-        quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    
-    #define QURL_PARAM                                                              \
-        QUrl url(_authenticate->_source + mapping);                                 \
-        url.setQuery(param);                                                        \
-        quoteRequest.setUrl(url);
+
 };  
+
+// internal use only
+#define ANY_REQUEST_AUTHED_TEMPLATE                                                 \
+    QNetworkRequest quoteRequest;                                                   \
+    QString bearerToken = "Bearer " + _authenticate->_accessToken;                  \
+    quoteRequest.setRawHeader("Authorization", bearerToken.toLocal8Bit());          \
+    quoteRequest.setUrl(QUrl(_authenticate->_source + mapping));                    \
+    quoteRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+#define QURL_PARAM                                                                  \
+    QUrl url(_authenticate->_source + mapping);                                     \
+    url.setQuery(param);                                                            \
+    quoteRequest.setUrl(url);
+
+#define NO_BODY_REQUEST(METHOD)                                                     \
+    QNetworkReply* reply = _authenticate->_manager->METHOD(quoteRequest);           \
+    return reply;                                                                   \
+}
+
+#define BODY_REQUEST(METHOD)                                                        \
+    QNetworkReply* reply = _authenticate->_manager->METHOD(quoteRequest, body);     \
+    return reply;                                                                   \
+}
+
+#define API_METHOD(NAME, MAPPING, ...)                                              \
+QNetworkReply *QuotesApi::NAME(__VA_ARGS__)                                         \
+{                                                                                   \
+    QString mapping = MAPPING;                                                      \
+    ANY_REQUEST_AUTHED_TEMPLATE
 
 #endif // QUOTESAPI_H
