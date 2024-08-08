@@ -79,9 +79,7 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 
     getCoreTable(QuotesApi::CoreTables::features);
     getCoreTable(QuotesApi::CoreTables::attrs);
-    getCoreTable(QuotesApi::CoreTables::owners);
-    emit _quotesApi->getFavouriteCards();
-    
+    getCoreTable(QuotesApi::CoreTables::owners);    
 }
 
 AuthedQuotes::~AuthedQuotes()
