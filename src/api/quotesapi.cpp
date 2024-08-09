@@ -17,93 +17,46 @@ QuotesApi::~QuotesApi()
     delete _authenticate;
 }
 
-QNetworkReply *QuotesApi::addQuote(SingleQuoteModel *data)
-{
-    QString mapping = "/inside/add-quote";
-
-    ANY_REQUEST_AUTHED_TEMPLATE
-    
+API_METHOD(addQuote, "/inside/add-quote", SingleQuoteModel *data)    
     QJsonDocument doc = data->serializeToQJsonDocument();
+    QByteArray body = doc.toJson();
+BODY_REQUEST(post)
 
-    QByteArray jsonQuote = doc.toJson();
-    qDebug() << doc;
-    qDebug() << jsonQuote;
-
-    QNetworkReply* reply = _authenticate->_manager->post(quoteRequest, jsonQuote);
-
-    return reply;
-}
-
-QNetworkReply *QuotesApi::addOwner(std::pair<QString, QString> owner)
-{
-    QString mapping = "/inside/add-owner";
-
-    ANY_REQUEST_AUTHED_TEMPLATE
+API_METHOD(addOwner, "/inside/add-owner", std::pair<QString, QString> owner)
     QJsonObject json
         {
             {"owner", owner.first},
             {"description", owner.second}
         };
-
     QJsonDocument doc(json);
-    QByteArray jsonOwner = doc.toJson();
+    QByteArray body = doc.toJson();
+BODY_REQUEST(post)
 
-    QNetworkReply* reply = _authenticate->_manager->post(quoteRequest, jsonOwner);
-    return reply;
-}
-
-QNetworkReply *QuotesApi::updateQuote(SingleQuoteModel* changed, SingleQuoteModel* original)
-{
-
+API_METHOD(updateQuote, "/inside/update-quote", SingleQuoteModel* changed, SingleQuoteModel* original)
     assert((changed->id() == original->id()) && (changed->cites() == original->cites()));
     bool attrsChanged    = changed->attrs() != original->attrs();
     bool featuresChanged = changed->features() != original->features();
     bool quoteChanged    = (changed->is_obscene() != original->is_obscene()) ||
                            (changed->quote() != original->quote()) ||
                            (changed->owner() != original->owner());
-
-    QString mapping = "/inside/update-quote";
-    ANY_REQUEST_AUTHED_TEMPLATE
-
-    QJsonObject body
+    QJsonObject json
         {
             {"quote", changed->serializeToQJsonDocument().object()},
             {"attrsChanged", attrsChanged},
             {"featuresChanged", featuresChanged},
             {"quoteChanged", quoteChanged}
         };
+    QByteArray body = QJsonDocument(json).toJson();
+BODY_REQUEST(put)
 
-    qDebug() << body;
-    QByteArray jsonQuote = QJsonDocument(body).toJson();
-
-    QNetworkReply* reply = _authenticate->_manager->put(quoteRequest, jsonQuote);
-
-    return reply;
-}
-
-QNetworkReply *QuotesApi::deleteQuote(int id)
-{
-    QString mapping = "/inside/delete-quote";
-    
-    ANY_REQUEST_AUTHED_TEMPLATE
-
+API_METHOD(deleteQuote, "/inside/delete-quote", int id)
     QUrlQuery param;
     param.addQueryItem("id", QString::number(id));
-    QURL_PARAM
+NO_BODY_REQUEST(deleteResource)
 
-    QNetworkReply* reply = _authenticate->_manager->deleteResource(quoteRequest);
 
-    return reply;
-}
-
-QNetworkReply *QuotesApi::getCoreTable(CoreTables ct)
-{
-    QString mapping = "/quotes/core-table";
-
-    ANY_REQUEST_AUTHED_TEMPLATE
-
+API_METHOD(getCoreTable, "/quotes/core-table", CoreTables ct)
     QString table;
-
     switch(ct)
     {
     case CoreTables::attrs:
@@ -118,68 +71,20 @@ QNetworkReply *QuotesApi::getCoreTable(CoreTables ct)
 
     QUrlQuery param;
     param.addQueryItem("table", table);
-    QURL_PARAM
-    qDebug() << "getCore Table" << url.toString();
-    QNetworkReply* reply = _authenticate->_manager->get(quoteRequest);
+NO_BODY_REQUEST(get)
 
-    return reply;
-}
-
-// API_METHOD(getCoreTable, "/quotes/core-table", CoreTables ct)
-//     QString table;
-//     switch(ct)
-//     {
-//     case CoreTables::attrs:
-//         table = "attrs"; break;
-
-//     case CoreTables::features:
-//         table = "features"; break;
-
-//     case CoreTables::owners:
-//         table = "owners"; break;
-//     }
-
-//     QUrlQuery param;
-//     param.addQueryItem("table", table);
-// QURL_PARAM
-// NO_BODY_REQUEST(get)
-
-QNetworkReply *QuotesApi::getQuoteCards(QString owner)
-{
-    QString mapping = "/quotes/owners";
-    ANY_REQUEST_AUTHED_TEMPLATE
-
+API_METHOD(getQuoteCards, "/quotes/owners", QString owner)
     QUrlQuery param;
     param.addQueryItem("owner", owner);
-    QURL_PARAM
+NO_BODY_REQUEST(get)
 
-    QNetworkReply* reply = _authenticate->_manager->get(quoteRequest);
 
-    return reply;
-}
+API_METHOD(getFavouriteCards, "/inside/fav-quotes", void)
+QUrlQuery param;
+NO_BODY_REQUEST(get)
 
-QNetworkReply *QuotesApi::getFavouriteCards()
-{
-    QString mapping = "/inside/fav-quotes";
-    ANY_REQUEST_AUTHED_TEMPLATE
 
-    QNetworkReply* reply = _authenticate->_manager->get(quoteRequest);
-
-    return reply;
-}
-
-QNetworkReply *QuotesApi::addFavouriteCard(SingleQuoteModel* quote)
-{
-    QString mapping = "/inside/add-fav";
-    ANY_REQUEST_AUTHED_TEMPLATE
-    
+API_METHOD(addFavouriteCard, "/inside/add-fav", SingleQuoteModel* quote)
     QJsonDocument doc = quote->serializeToQJsonDocument();
-
-    QByteArray jsonQuote = doc.toJson();
-    qDebug() << doc;
-    qDebug() << jsonQuote;
-
-    QNetworkReply* reply = _authenticate->_manager->put(quoteRequest, jsonQuote);
-
-    return reply;
-}
+    QByteArray body = doc.toJson();
+BODY_REQUEST(put)
