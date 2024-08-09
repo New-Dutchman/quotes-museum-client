@@ -20,6 +20,9 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     ui->homepageScrollArea->horizontalScrollBar()->setEnabled(false);
     ui->quotesScrollArea->horizontalScrollBar()->setEnabled(false);
 
+    searchTab = std::make_unique<SearchTab>(_quotesApi, this);
+    ui->searchTab->layout()->addWidget(searchTab.get());
+
     _apiThread = new QThread(this);
 
     connect(this, &AuthedQuotes::destroyed, _apiThread, &QThread::quit);

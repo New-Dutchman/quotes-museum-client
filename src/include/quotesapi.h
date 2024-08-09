@@ -27,6 +27,7 @@ public:
     QNetworkReply* deleteQuote(int id);
     QNetworkReply* addOwner(std::pair<QString, QString>);
     QNetworkReply* updateQuote(SingleQuoteModel* changed, SingleQuoteModel* original);
+    QNetworkReply* searchQuote(const QString&);
 
     inline int authenticate() {return _authenticate->auth(); };
     inline QNetworkReply* addUser(User * user) {return _authenticate->addUser(user); };

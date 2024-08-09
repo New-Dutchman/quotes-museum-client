@@ -19,10 +19,10 @@
    <string>TabWidget</string>
   </property>
   <property name="tabPosition">
-   <enum>QTabWidget::South</enum>
+   <enum>QTabWidget::TabPosition::South</enum>
   </property>
   <property name="tabShape">
-   <enum>QTabWidget::Triangular</enum>
+   <enum>QTabWidget::TabShape::Triangular</enum>
   </property>
   <property name="currentIndex">
    <number>0</number>
@@ -41,7 +41,7 @@
   </property>
   <widget class="QWidget" name="userTab">
    <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
+    <enum>Qt::LayoutDirection::LeftToRight</enum>
    </property>
    <attribute name="title">
     <string>Homepage</string>
@@ -81,8 +81,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>620</width>
-         <height>476</height>
+         <width>618</width>
+         <height>484</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -93,7 +93,7 @@
       </widget>
      </widget>
     </item>
-    <item row="5" column="1" alignment="Qt::AlignRight">
+    <item row="5" column="1" alignment="Qt::AlignmentFlag::AlignRight">
      <widget class="QPushButton" name="logoutBtn">
       <property name="minimumSize">
        <size>
@@ -108,7 +108,7 @@
        </size>
       </property>
       <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
       </property>
       <property name="text">
        <string>logout</string>
@@ -126,7 +126,7 @@
       <property name="topMargin">
        <number>0</number>
       </property>
-      <item alignment="Qt::AlignBottom">
+      <item alignment="Qt::AlignmentFlag::AlignBottom">
        <widget class="QPushButton" name="changePasswdBtn">
         <property name="text">
          <string>change password</string>
@@ -216,7 +216,7 @@
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -251,8 +251,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>820</width>
-         <height>459</height>
+         <width>818</width>
+         <height>469</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0">
@@ -303,6 +303,7 @@
    <attribute name="title">
     <string>Search</string>
    </attribute>
+   <layout class="QGridLayout" name="gridLayout_3"/>
   </widget>
  </widget>
  <resources/>

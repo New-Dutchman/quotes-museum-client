@@ -38,6 +38,8 @@ signals:
     void sendIfOwnerAddedResponse(bool);
     void sendIfQuoteUpdatedResponse(QString);
 
+    void searchQuoteResponse(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
+
 public slots:
     void getCoreTable(QuotesApi::CoreTables);
     void getQuoteCards(const QString &owner);
@@ -49,6 +51,8 @@ public slots:
     void deleteQuote(SingleQuoteModel* data);
     void addOwner(std::pair<QString, QString>);
     void updateQuote(SingleQuoteModel *changed, SingleQuoteModel *original);
+
+    void searchQuote(const QString&);
 
 private:
     std::unique_ptr<QuotesApi> _api;

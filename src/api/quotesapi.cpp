@@ -88,3 +88,8 @@ API_METHOD(addFavouriteCard, "/inside/add-fav", SingleQuoteModel* quote)
     QJsonDocument doc = quote->serializeToQJsonDocument();
     QByteArray body = doc.toJson();
 BODY_REQUEST(put)
+
+API_METHOD(searchQuote, "/quotes/search", const QString& quote)
+    QUrlQuery param;
+    param.addQueryItem("quote", quote);
+NO_BODY_REQUEST(get)

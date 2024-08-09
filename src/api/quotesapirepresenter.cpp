@@ -232,6 +232,31 @@ void QuotesApiRepresenter::updateQuote(SingleQuoteModel* changed, SingleQuoteMod
     emit sendIfQuoteUpdatedResponse(success);
 }
 
+void QuotesApiRepresenter::searchQuote(const QString& quote)
+{
+    QNetworkReply* reply = _api->searchQuote(quote);
+
+    waitAnswer(reply);
+    if (reply->error() != QNetworkReply::NoError) throw QException();
+
+    QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+
+    if (!doc.isArray()) throw QException();
+    QJsonArray raw = doc.array();
+    QList<std::shared_ptr<SingleQuoteModel>>* values = new QList<std::shared_ptr<SingleQuoteModel>>();
+
+    for(const QJsonValue & v: raw)
+    {
+        std::shared_ptr<SingleQuoteModel> q =
+            std::shared_ptr<SingleQuoteModel>(SingleQuoteModel::buildFromQVariant(v.toObject().toVariantMap()));
+        values->append(q);
+    }
+
+    delete reply;
+
+    emit searchQuoteResponse(values);
+}
+
 void QuotesApiRepresenter::waitAnswer(QNetworkReply *reply)
 {
     QEventLoop loop(this);

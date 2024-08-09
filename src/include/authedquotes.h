@@ -5,6 +5,7 @@
 #include <QThread>
 
 #include "quotesapirepresenter.h"
+#include "searchtab.h"
 
 namespace Ui {
 class AuthedQuotes;
@@ -56,6 +57,10 @@ private slots:
     void updateQuoteResponse(QString);
 
 private:
+    std::unique_ptr<SearchTab> searchTab;
+
+    friend SearchTab;
+
     void createResponseWindow(QString, bool);
 
     Ui::AuthedQuotes *ui;
