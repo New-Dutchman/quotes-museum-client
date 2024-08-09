@@ -62,18 +62,6 @@ QNetworkReply *QuotesApi::updateQuote(SingleQuoteModel* changed, SingleQuoteMode
                            (changed->quote() != original->quote()) ||
                            (changed->owner() != original->owner());
 
-    // qDebug() << changed->is_obscene() << original->is_obscene() <<
-    //             changed->quote() << original->quote() <<
-    //             changed->owner() << original->owner() <<
-    //             changed->id() << original->id() <<
-    //             changed->cites() << original->cites();
-
-    // qDebug() << (changed->is_obscene() != original->is_obscene()) <<
-    //             (changed->quote() != original->quote()) <<
-    //             (changed->owner() != original->owner()) <<
-    //             (changed->id() == original->id()) <<
-    //             (changed->cites() == original->cites());
-
     QString mapping = "/inside/update-quote";
     ANY_REQUEST_AUTHED_TEMPLATE
 
