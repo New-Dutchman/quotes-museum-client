@@ -23,6 +23,7 @@ public:
     QNetworkReply* getQuoteCards(QString);
     QNetworkReply* getFavouriteCards();
     QNetworkReply* addFavouriteCard(SingleQuoteModel* quote);
+    QNetworkReply* removeFavouriteCard(int quoteId);
     QNetworkReply* addQuote(SingleQuoteModel* data);
     QNetworkReply* deleteQuote(int id);
     QNetworkReply* addOwner(std::pair<QString, QString>);

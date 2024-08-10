@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>138</height>
+    <width>555</width>
+    <height>219</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,7 +33,7 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="4,0">
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="4">
    <property name="topMargin">
     <number>9</number>
    </property>
@@ -43,10 +43,10 @@
       <number>-1</number>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Plain</enum>
+      <enum>QFrame::Shadow::Plain</enum>
      </property>
      <property name="lineWidth">
       <number>5</number>
@@ -88,7 +88,7 @@
         </property>
        </widget>
       </item>
-      <item alignment="Qt::AlignRight">
+      <item alignment="Qt::AlignmentFlag::AlignRight">
        <widget class="QLabel" name="label">
         <property name="font">
          <font>
@@ -105,49 +105,6 @@
       </item>
      </layout>
     </widget>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1">
-     <item alignment="Qt::AlignTop">
-      <widget class="QPushButton" name="addFavsBtn">
-       <property name="maximumSize">
-        <size>
-         <width>250</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>add to favorites</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignVCenter">
-      <widget class="QPushButton" name="deleteCardBtn">
-       <property name="maximumSize">
-        <size>
-         <width>250</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>delete</string>
-       </property>
-      </widget>
-     </item>
-     <item alignment="Qt::AlignBottom">
-      <widget class="QPushButton" name="updateQuoteBtn">
-       <property name="maximumSize">
-        <size>
-         <width>250</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>change quote</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

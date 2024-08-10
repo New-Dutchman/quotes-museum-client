@@ -143,19 +143,33 @@ void QuotesApiRepresenter::getFavouriteCards()
 void QuotesApiRepresenter::addFavorite(SingleQuoteModel* quote)
 {
     QNetworkReply* reply = _api->addFavouriteCard(quote);
-
     waitAnswer(reply);
-    if (reply->error() != QNetworkReply::NoError) emit sendIfQuoteAddedToCollection(false);
+
+    if (reply->error() != QNetworkReply::NoError) emit sendFavouriteQuoteStatus(false, "adding");
 
     QByteArray responseBytes = reply->readAll();
-
     bool success = QString::fromUtf8(responseBytes).trimmed() == "true";
 
     qDebug() << responseBytes << success << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-
     delete reply;
 
-    emit sendIfQuoteAddedToCollection(success);
+    emit sendFavouriteQuoteStatus(success, "adding");
+}
+
+void QuotesApiRepresenter::removeFavorite(SingleQuoteModel* quote)
+{
+    QNetworkReply* reply = _api->removeFavouriteCard(quote->id());
+    waitAnswer(reply);
+
+    if (reply->error() != QNetworkReply::NoError) emit sendFavouriteQuoteStatus(false, "removing");
+
+    QByteArray responseBytes = reply->readAll();
+    bool success = QString::fromUtf8(responseBytes).trimmed() == "true";
+
+    qDebug() << responseBytes << success << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    delete reply;
+
+    emit sendFavouriteQuoteStatus(success, "removing");
 }
 
 void QuotesApiRepresenter::addQuote(SingleQuoteModel *data)

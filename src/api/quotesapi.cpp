@@ -83,11 +83,15 @@ API_METHOD(getFavouriteCards, "/inside/fav-quotes", void)
 QUrlQuery param;
 NO_BODY_REQUEST(get)
 
-
 API_METHOD(addFavouriteCard, "/inside/add-fav", SingleQuoteModel* quote)
     QJsonDocument doc = quote->serializeToQJsonDocument();
     QByteArray body = doc.toJson();
 BODY_REQUEST(put)
+
+API_METHOD(removeFavouriteCard, "/inside/remove-fav", int quoteId)
+    QUrlQuery param;
+    param.addQueryItem("quoteId", QString::number(quoteId));
+NO_BODY_REQUEST(deleteResource)
 
 API_METHOD(searchQuote, "/quotes/search", const QString& quote)
     QUrlQuery param;

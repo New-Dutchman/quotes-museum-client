@@ -51,7 +51,10 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 
     // add favourite quote
     QObject::connect(this, &AuthedQuotes::addFavouriteQuoteRequest, _quotesApi.get(), &QuotesApiRepresenter::addFavorite);
-    QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendIfQuoteAddedToCollection, this, &AuthedQuotes::addFavourite);
+    QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendFavouriteQuoteStatus, this, &AuthedQuotes::favouriteQuoteAction);
+
+    // remove favourite quote
+    QObject::connect(this, &AuthedQuotes::removeFavouriteQuoteRequest, _quotesApi.get(), &QuotesApiRepresenter::removeFavorite);
 
     // add owner
     QObject::connect(this, &AuthedQuotes::sendAddOwnerRequest, _quotesApi.get(), &QuotesApiRepresenter::addOwner);
@@ -137,20 +140,20 @@ void AuthedQuotes::onOwnersComdoBoxCurrentTextChanged(QList<std::shared_ptr<Sing
 
     foreach(const std::shared_ptr<SingleQuoteModel> &sqm, *quotes)
     {
-        QWidget *sqc = new SingleQuoteCard(sqm, this);
+        QWidget *sqc = new SingleQuoteCard(sqm, SingleQuoteCard::QuoteMode::JustWatch, this);
         ui->quotesLayout->addWidget(sqc);
     }
 
     delete quotes;
 }
 
-void AuthedQuotes::addFavourite(bool success)
+void AuthedQuotes::favouriteQuoteAction(bool success, const QString& message)
 {
     if(!success)
     {
         QMessageBox msg(this);
 
-        msg.setText("Error occupied while was adding quote to favorite list");
+        msg.setText("Error occupied while was " + message + " quote");
         msg.exec();
     }
 }
@@ -181,7 +184,7 @@ void AuthedQuotes::onUpdateBtnClicked(QList<std::shared_ptr<SingleQuoteModel>>* 
 
     foreach(const std::shared_ptr<SingleQuoteModel> &sqm, *quotes)
     {
-        QWidget *sqc = new SingleQuoteCard(sqm, this);
+        QWidget *sqc = new SingleQuoteCard(sqm, SingleQuoteCard::QuoteMode::Favourite, this);
         ui->favQuotesLayout->addWidget(sqc);
     }
 
@@ -258,4 +261,9 @@ void AuthedQuotes::deleteQuoteResponse(bool success)
 void AuthedQuotes::addOwnerResponse(bool success)
 {
     createResponseWindow("Error occured while was adding owner =(", success);
+}
+
+void AuthedQuotes::removeFavouriteQuoteFromSingleCard(SingleQuoteModel* model)
+{
+    emit removeFavouriteQuoteRequest(model);
 }

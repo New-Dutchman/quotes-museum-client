@@ -1,9 +1,11 @@
 #include "singlequotecard.h"
 #include "authedquotes.h"
 #include "ui_singlequotecard.h"
+#include "quotecontextmenu.h"
 
-SingleQuoteCard::SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QWidget *parent)
+SingleQuoteCard::SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QuoteMode mode, QWidget *parent)
     : QWidget(parent)
+    , options(mode)
     , ui(new Ui::SingleQuoteCard)
 {
     ui->setupUi(this);
@@ -13,7 +15,6 @@ SingleQuoteCard::SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QWidge
     ui->label->setText("cites: " + QString::number(_model->cites()));
     //this->setStyleSheet("border: 2px rgb(0, 255, 127)");
     //ui->frame->setStyleSheet("border: 2px solid rgb(0, 211, 158);");
-
 
     foreach(const QString &text, _model->features())
     {
@@ -32,14 +33,17 @@ SingleQuoteCard::SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QWidge
         ui->attrsLayout->addWidget(l);
     }
 
-    QObject::connect(ui->updateQuoteBtn, &QPushButton::clicked, this, &SingleQuoteCard::onUpdateClicked);
+    // QObject::connect(ui->updateQuoteBtn, &QPushButton::clicked, this, &SingleQuoteCard::onUpdateClicked);
     QObject::connect(this, &SingleQuoteCard::updateInfo, (AuthedQuotes*)parent, &AuthedQuotes::updateQuoteFromSingleCard);
 
-    QObject::connect(ui->addFavsBtn, &QPushButton::clicked, this, &SingleQuoteCard::onAddFavClicked);
+    // QObject::connect(ui->addFavsBtn, &QPushButton::clicked, this, &SingleQuoteCard::onAddFavClicked);
     QObject::connect(this, &SingleQuoteCard::addFavourite, (AuthedQuotes*)parent, &AuthedQuotes::favouriteQuoteFromSingleCard);
 
-    QObject::connect(ui->deleteCardBtn, &QPushButton::clicked, this, &SingleQuoteCard::onDeletCardClicked);
+    // QObject::connect(ui->deleteCardBtn, &QPushButton::clicked, this, &SingleQuoteCard::onDeletCardClicked);
     QObject::connect(this, &SingleQuoteCard::deleteCard, (AuthedQuotes*)parent, &AuthedQuotes::aboutToDeleteQuoteFromSingleCard);
+
+    QObject::connect(this, &SingleQuoteCard::removeFavourite, (AuthedQuotes*)parent, &AuthedQuotes::removeFavouriteQuoteFromSingleCard);
+
 }
 
 SingleQuoteCard::~SingleQuoteCard()
@@ -59,8 +63,24 @@ void SingleQuoteCard::onAddFavClicked()
     emit addFavourite(_model.get());
 }
 
+void SingleQuoteCard::onRemoveFavClicked()
+{
+    emit removeFavourite(_model.get());
+}
+
 void SingleQuoteCard::onDeletCardClicked()
 {
     qDebug() << "SingleQuoteCard::onDeletCardClicked";
     emit deleteCard(_model.get());
+}
+
+void SingleQuoteCard::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) 
+    {
+        quoteMenu = new QuoteContextMenu(this);
+
+        quoteMenu->popup(event->globalPosition().toPoint());
+    }
+    QWidget::mousePressEvent(event);
 }

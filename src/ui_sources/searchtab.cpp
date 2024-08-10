@@ -33,7 +33,7 @@ void SearchTab::searchForQuoteResponse(QList<std::shared_ptr<SingleQuoteModel>>*
 
     foreach(const std::shared_ptr<SingleQuoteModel> &sqm, *quotes)
     {
-        QWidget *sqc = new SingleQuoteCard(sqm, this);
+        QWidget *sqc = new SingleQuoteCard(sqm, SingleQuoteCard::QuoteMode::JustWatch, this);
         ui->quotesLayout->addWidget(sqc);
     }
 

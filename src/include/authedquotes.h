@@ -24,15 +24,17 @@ signals:
     void sendGetCoreTableRequest(QuotesApi::CoreTables);
 
     void addFavouriteQuoteRequest(SingleQuoteModel* model);
+    void removeFavouriteQuoteRequest(SingleQuoteModel* model);
     void sendAddQuoteRequest(SingleQuoteModel* model);
     void sendDeleteQuoteRequest(SingleQuoteModel* model);
     void sendAddOwnerRequest(std::pair<QString, QString> data);
     void sendUpdateQuoteRequest(SingleQuoteModel* data, SingleQuoteModel* original);
 
 public slots:
-    void favouriteQuoteFromSingleCard(SingleQuoteModel* );
+    void favouriteQuoteFromSingleCard(SingleQuoteModel* model);
     void updateQuoteFromSingleCard(SingleQuoteModel* model);
     void aboutToDeleteQuoteFromSingleCard(SingleQuoteModel* model);
+    void removeFavouriteQuoteFromSingleCard(SingleQuoteModel* model);
 
     void quoteUpdateAccepted(SingleQuoteModel* data, SingleQuoteModel* original);
     void quoteAddAccepted(SingleQuoteModel* data);
@@ -50,7 +52,8 @@ private slots:
     void onOwnersComdoBoxCurrentTextChanged(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void onUpdateBtnClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
 
-    void addFavourite(bool);
+    // void addFavourite(bool);
+    void favouriteQuoteAction(bool, const QString&);
     void addQuoteResponse(bool);
     void deleteQuoteResponse(bool);
     void addOwnerResponse(bool);
