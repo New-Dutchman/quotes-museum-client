@@ -115,6 +115,31 @@ void QuotesApiRepresenter::getQuoteCards(const QString &owner)
     emit sendQuoteOwnerCards(values);
 }
 
+void QuotesApiRepresenter::getPossessedCards()
+{
+    QNetworkReply* reply = _api->getOwnedCards();
+
+    waitAnswer(reply);
+    if (reply->error() != QNetworkReply::NoError) throw QException();
+
+    QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+
+    if (!doc.isArray()) throw QException();
+    QJsonArray raw = doc.array();
+    QList<std::shared_ptr<SingleQuoteModel>>* values = new QList<std::shared_ptr<SingleQuoteModel>>();
+
+    for(const QJsonValue & v: raw)
+    {
+        std::shared_ptr<SingleQuoteModel> q =
+            std::shared_ptr<SingleQuoteModel>(SingleQuoteModel::buildFromQVariant(v.toObject().toVariantMap()));
+        values->append(q);
+    }
+
+    delete reply;
+
+    emit sendQuotePossessedCards(values);
+}
+
 void QuotesApiRepresenter::getFavouriteCards()
 {
     QNetworkReply* reply = _api->getFavouriteCards();

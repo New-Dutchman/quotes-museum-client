@@ -78,6 +78,9 @@ API_METHOD(getQuoteCards, "/quotes/owners", QString owner)
     param.addQueryItem("owner", owner);
 NO_BODY_REQUEST(get)
 
+API_METHOD(getOwnedCards, "/inside/owning", void)
+QUrlQuery param;
+NO_BODY_REQUEST(get)
 
 API_METHOD(getFavouriteCards, "/inside/fav-quotes", void)
 QUrlQuery param;

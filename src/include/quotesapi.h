@@ -22,6 +22,7 @@ public:
     QNetworkReply* getCoreTable(CoreTables);
     QNetworkReply* getQuoteCards(QString);
     QNetworkReply* getFavouriteCards();
+    QNetworkReply* getOwnedCards();
     QNetworkReply* addFavouriteCard(SingleQuoteModel* quote);
     QNetworkReply* removeFavouriteCard(int quoteId);
     QNetworkReply* addQuote(SingleQuoteModel* data);

@@ -23,6 +23,8 @@ file(GLOB_RECURSE PROJECT_FILES
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/src/include)
+include_directories(${CMAKE_SOURCE_DIR}/src/widgets)
+
 
 qt_standard_project_setup()
 

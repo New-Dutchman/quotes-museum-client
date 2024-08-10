@@ -31,6 +31,7 @@ signals:
 
     void sendQuoteOwnerCards(QList<std::shared_ptr<SingleQuoteModel>>*);
     void sendQuoteFavouriteCards(QList<std::shared_ptr<SingleQuoteModel>>*);
+    void sendQuotePossessedCards(QList<std::shared_ptr<SingleQuoteModel>>*);
 
     void sendFavouriteQuoteStatus(bool, const QString&);
     void sendIfQuoteAddedResponse(bool);
@@ -43,7 +44,8 @@ signals:
 public slots:
     void getCoreTable(QuotesApi::CoreTables);
     void getQuoteCards(const QString &owner);
-
+    
+    void getPossessedCards();
     void getFavouriteCards();
     void addFavorite(SingleQuoteModel* quote);
     void removeFavorite(SingleQuoteModel* quote);

@@ -1,6 +1,7 @@
 #include "authedquotes.h"
 #include "addownerdialog.h"
 #include "dialogupdatequote.h"
+#include "clickablelabel.h"
 #include "inputowner.h"
 #include "qmessagebox.h"
 #include "quoteinput.h"
@@ -22,6 +23,9 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 
     searchTab = std::make_unique<SearchTab>(_quotesApi, this);
     ui->searchTab->layout()->addWidget(searchTab.get());
+
+    ui->quotesLabelsLayout->addWidget(new ClickableLabel("Favourite ones", &AuthedQuotes::updateFavsQuotesRequest, this));
+    ui->quotesLabelsLayout->addWidget(new ClickableLabel("Added ones", &AuthedQuotes::updateAddedQuotesRequest, this));
 
     _apiThread = new QThread(this);
 
@@ -46,8 +50,12 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     QObject::connect(ui->ownersComdoBox, &QComboBox::currentTextChanged, _quotesApi.get(), &QuotesApiRepresenter::getQuoteCards);
     QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendQuoteOwnerCards, this, &AuthedQuotes::onOwnersComdoBoxCurrentTextChanged);
     QObject::connect(ui->updateFavs, &QPushButton::clicked, _quotesApi.get(), &QuotesApiRepresenter::getFavouriteCards);
-    QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendQuoteFavouriteCards, this, &AuthedQuotes::onUpdateBtnClicked);
 
+    QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendQuoteFavouriteCards, this, &AuthedQuotes::onUpdateFavsClicked);
+
+    // get added quotes
+    QObject::connect(this, &AuthedQuotes::sendUpdateAddedQuotesRequest, _quotesApi.get(), &QuotesApiRepresenter::getPossessedCards);
+    QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendQuotePossessedCards, this, &AuthedQuotes::onUpdateAddedClicked);
 
     // add favourite quote
     QObject::connect(this, &AuthedQuotes::addFavouriteQuoteRequest, _quotesApi.get(), &QuotesApiRepresenter::addFavorite);
@@ -81,7 +89,7 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
         ui->logoutBtn->setDisabled(false);
         //this->removeTab(0);
         this->setCurrentIndex(1);
-    } else emit _quotesApi->getFavouriteCards();
+    } else emit ui->updateFavs->clicked();
 
     getCoreTable(QuotesApi::CoreTables::features);
     getCoreTable(QuotesApi::CoreTables::attrs);
@@ -177,7 +185,7 @@ void AuthedQuotes::aboutToDeleteQuoteFromSingleCard(SingleQuoteModel* model)
     if(msgBox.exec() == QMessageBox::Yes) emit sendDeleteQuoteRequest(model);
 }
 
-void AuthedQuotes::onUpdateBtnClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes)
+void AuthedQuotes::onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes)
 {
 
     freeQuotesLayout(ui->favQuotesLayout);
@@ -185,6 +193,30 @@ void AuthedQuotes::onUpdateBtnClicked(QList<std::shared_ptr<SingleQuoteModel>>* 
     foreach(const std::shared_ptr<SingleQuoteModel> &sqm, *quotes)
     {
         QWidget *sqc = new SingleQuoteCard(sqm, SingleQuoteCard::QuoteMode::Favourite, this);
+        ui->favQuotesLayout->addWidget(sqc);
+    }
+
+    delete quotes;
+}
+
+void AuthedQuotes::updateAddedQuotesRequest()
+{
+    emit sendUpdateAddedQuotesRequest();
+}
+
+void AuthedQuotes::updateFavsQuotesRequest()
+{
+    emit ui->updateFavs->clicked();
+}
+
+void AuthedQuotes::onUpdateAddedClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes)
+{
+
+    freeQuotesLayout(ui->favQuotesLayout);
+
+    foreach(const std::shared_ptr<SingleQuoteModel> &sqm, *quotes)
+    {
+        QWidget *sqc = new SingleQuoteCard(sqm, SingleQuoteCard::QuoteMode::JustWatch, this);
         ui->favQuotesLayout->addWidget(sqc);
     }
 
