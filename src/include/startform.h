@@ -4,6 +4,7 @@
 #include "connection.h"
 #include "user.h"
 #include <QWidget>
+#include <QCompleter>
 
 namespace Ui {
 class StartForm;
@@ -23,11 +24,19 @@ private:
     Ui::StartForm *ui;
     std::shared_ptr<Connection> _conn;
     std::shared_ptr<User> _user;
+    QMap<QString, QString> _users;
+    QString _userDataFile = "userData";
+
+    QCompleter *completer;
+
+    void readUsers();
 
 private slots:
     void onLoginClick();
     void defaultUserChecked();
     void defaultConnectionChecked();
+    void rememberUser();
+    void completeUserPassword(const QString& username);
 
 signals:
     void loginRequest();

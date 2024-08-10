@@ -128,7 +128,8 @@ SingleQuoteModel *SingleQuoteModel::buildFromQVariant(QVariantMap rawQuote)
 
     QVariantMap attrsMap = rawQuote.value("attrs").toMap();
     QMap<QString, QString>* attrs = new QMap<QString, QString>();
-    for (auto it = attrsMap.begin(); it != attrsMap.end(); ++it) {
+    for (auto it = attrsMap.begin(); it != attrsMap.end(); ++it) 
+    {
         QString key = it.key();
         QString value = it.value().toString();
         attrs->insert(key, value);

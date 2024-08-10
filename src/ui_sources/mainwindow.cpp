@@ -42,7 +42,6 @@ void MainWindow::startForm()
 void MainWindow::authorization()
 {
     qDebug() << "MainWindow::authorization";
-
     emit pleaseAuthenticateRequest(_user, _conn);
 }
 
@@ -56,10 +55,11 @@ void MainWindow::forbid()
 }
 
 void MainWindow::login()
-{
+{   
+    emit rememberUser();
     qDebug() << "MainWindow::authed";
     ui-> verticalLayout->removeWidget(widget);
-    delete(widget);
+    widget->deleteLater();
     widget = new AuthedQuotes(_apiRepresenter, _user->username(), this);
     ui->verticalLayout->addWidget(widget);
 }

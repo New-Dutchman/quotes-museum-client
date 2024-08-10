@@ -1,6 +1,9 @@
 #include "startform.h"
 #include "ui_startform.h"
 #include "mainwindow.h"
+#include <QFile>
+#include <Qmap>
+#include <QOverload>
 
 StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> conn, QWidget *parent)
     : QWidget(parent), ui(new Ui::StartForm), _conn(conn), _user(user)
@@ -10,9 +13,18 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
 
     ui->defaultUserCheckBox->setLayoutDirection(Qt::RightToLeft);
     ui->defaultServerCheckBox->setLayoutDirection(Qt::RightToLeft);
+    readUsers();
+
+    completer = new QCompleter(_users.keys(), this);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+
+    ui->usernameLE->setCompleter(completer);
 
     QObject::connect(ui->loginBtn, &QPushButton::clicked, this, &StartForm::onLoginClick);
     QObject::connect(this, &StartForm::loginRequest, (MainWindow*)this->parent(), &MainWindow::authorization);
+    QObject::connect((MainWindow*)this->parent(), &MainWindow::rememberUser, this, &StartForm::rememberUser);
+
+    QObject::connect(completer, QOverload<const QString &>::of(&QCompleter::activated), this, &StartForm::completeUserPassword);
 
     QObject::connect(ui->registerBtn, &QPushButton::clicked, (MainWindow*)this->parent(), &MainWindow::registerForm);
 
@@ -23,6 +35,7 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
 
 StartForm::~StartForm()
 {
+    delete completer;
     delete ui;
     qDebug() << "StartForm widget destructor";
 }
@@ -69,4 +82,42 @@ void StartForm::defaultConnectionChecked()
         ui->hostnameLE->setDisabled(false);
         ui->portLE->setDisabled(false);
     }
+}
+
+void StartForm::readUsers()
+{
+    QFile userData(_userDataFile);
+
+    if (userData.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream input(&userData);
+        QStringList users;
+        while (!input.atEnd())
+        {
+            users = input.readLine().split("\t");
+            assert(users.size() == 2);
+            _users.insert(users[0], users[1]);
+        }
+    }
+}
+
+void StartForm::rememberUser()
+{
+    if (!ui->rememberMeCheckBox->isChecked() ||
+         ui->defaultUserCheckBox->isChecked() ||
+         _users.contains(_user->username()))
+    {
+        return;
+    }
+    QFile file(_userDataFile);
+    if (file.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&file);
+        out << _user->username() << '\t' << _user->passwd() << '\n';
+        file.close();
+    }
+}
+
+void StartForm::completeUserPassword(const QString& username)
+{
+    ui->passwordLE->setText(_users[username]);
 }
