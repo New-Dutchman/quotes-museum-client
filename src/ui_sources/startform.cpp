@@ -73,8 +73,8 @@ void StartForm::defaultConnectionChecked()
 {
     if (ui->defaultServerCheckBox->isChecked())
     {
-        ui->hostnameLE->setText("localhost");
-        ui->portLE->setText("8080");
+        ui->hostnameLE->setText(_conn->defaultServer());
+        ui->portLE->setText(QString::number(_conn->defaultPort()));
         ui->hostnameLE->setDisabled(true);
         ui->portLE->setDisabled(true);
     }

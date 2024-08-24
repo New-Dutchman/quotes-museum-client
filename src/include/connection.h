@@ -17,6 +17,8 @@ public:
     void port(int);
 
     void setDefaultConn();
+    int defaultPort();
+    QString defaultServer();
 
 private:
     QString _server;
