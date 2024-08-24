@@ -53,8 +53,8 @@ void QuotesApiRepresenter::getCoreTable(QuotesApi::CoreTables ct)
 
 void QuotesApiRepresenter::auth(std::shared_ptr<User> user, std::shared_ptr<Connection> conn)
 {   
+    _api.reset();
     _api = std::make_unique<QuotesApi>(conn, user);
-    qDebug() << "QuotesApiRepresenter::QuotesApiRepresenter";
     _api->setParent(this);
 
     connect(_authTimer, &QTimer::timeout, _api.get(), &QuotesApi::authenticate);
@@ -71,11 +71,13 @@ void QuotesApiRepresenter::tryAuthenticate(std::shared_ptr<User> user, std::shar
     _lifetime != 0? emit authenticated() : emit forbidden();
 }
 
-void QuotesApiRepresenter::addUser(User* user)
+void QuotesApiRepresenter::addUser(std::shared_ptr<User> user, std::shared_ptr<Connection> conn)
 {
-
-    qDebug() << "QuotesApiRepresenter::addUser, user: " << user->username() << user->passwd();
-    QNetworkReply* reply = _api->addUser(user);
+    _api.reset();
+    _api = std::make_unique<QuotesApi>(conn, user);
+    _api->setParent(this);
+    // qDebug() << "QuotesApiRepresenter::addUser, user: " << user->username() << user->passwd();
+    QNetworkReply* reply = _api->addUser();
 
     waitAnswer(reply);
 

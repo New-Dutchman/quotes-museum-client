@@ -33,7 +33,7 @@ public slots:
 
 signals:
     void pleaseAuthenticateRequest(std::shared_ptr<User> user, std::shared_ptr<Connection> conn);
-    void pleaseRegisterNewUserRequest(User*);
+    void pleaseRegisterNewUserRequest(std::shared_ptr<User> user, std::shared_ptr<Connection> conn);
     void rememberUser();
 
 private:

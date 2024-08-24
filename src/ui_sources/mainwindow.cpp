@@ -33,6 +33,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::startForm()
 {
+    _user->passwd(_user->passwd(), _user->defaultPasswd());
+    _user->username(_user->defaultUsername(), _user->passwd());
     ui-> verticalLayout->removeWidget(widget);
     delete(widget);
     widget = new StartForm(_user, _conn, this);
@@ -74,9 +76,9 @@ void MainWindow::registerForm()
 void MainWindow::createNewUser(QString name, QString password)
 {
     User newUser = User(name, password);
+    _user = std::make_shared<User>(newUser);
 
-    emit pleaseRegisterNewUserRequest(&newUser);
-
+    emit pleaseRegisterNewUserRequest(_user, _conn);
 }
 
 void MainWindow::checkAddedUser(QString answer)

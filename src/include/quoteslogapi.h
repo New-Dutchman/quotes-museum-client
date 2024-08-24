@@ -32,7 +32,7 @@ class QuotesLogApi: public QObject
 public:
     int auth();
 
-    QNetworkReply* addUser(User *);
+    QNetworkReply* addUser();
 
 };
 

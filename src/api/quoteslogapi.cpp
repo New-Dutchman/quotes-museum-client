@@ -65,7 +65,7 @@ int QuotesLogApi::auth()
     }
 }
 
-QNetworkReply *QuotesLogApi::addUser(User* user)
+QNetworkReply *QuotesLogApi::addUser()
 {
     QString mapping = "/auth/sign-up";
     QNetworkRequest registerRequest;
@@ -76,8 +76,8 @@ QNetworkReply *QuotesLogApi::addUser(User* user)
 
     QJsonObject json
         {
-            {"username", user->username()},
-            {"password", user->passwd()}
+            {"username", _user->username()},
+            {"password", _user->passwd()}
         };
     QJsonDocument doc(json);
     QByteArray registration = doc.toJson();

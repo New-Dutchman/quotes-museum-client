@@ -32,7 +32,7 @@ public:
     QNetworkReply* searchQuote(const QString&);
 
     inline int authenticate() {return _authenticate->auth(); };
-    inline QNetworkReply* addUser(User * user) {return _authenticate->addUser(user); };
+    inline QNetworkReply* addUser() {return _authenticate->addUser(); };
 
 private:
     QuotesLogApi* _authenticate;

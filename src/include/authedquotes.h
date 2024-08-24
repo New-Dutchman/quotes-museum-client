@@ -6,6 +6,7 @@
 
 #include "quotesapirepresenter.h"
 #include "searchtab.h"
+#include "clickablelabel.h"
 
 namespace Ui {
 class AuthedQuotes;
@@ -56,6 +57,7 @@ private slots:
     void onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void onUpdateAddedClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void updateAddedQuotesRequest();
+    void changeLabelsState();
     void updateFavsQuotesRequest();
 
     // void addFavourite(bool);
@@ -82,6 +84,10 @@ private:
     QStringList* _owners;
     QStringList* _attrs;
     QStringList* _features;
+
+    ClickableLabel<AuthedQuotes>* favouriteQuotesLabel;
+    ClickableLabel<AuthedQuotes>* addedQuotesLabel;
+
 };
 
 #endif // AUTHEDQUOTES_H

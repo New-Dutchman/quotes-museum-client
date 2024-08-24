@@ -38,8 +38,11 @@ private slots:
     void rememberUser();
     void completeUserPassword(const QString& username);
 
+    void onRegisterClick();
+
 signals:
     void loginRequest();
+    void registerRequest();
 };
 
 #endif // STARTFORM_H

@@ -18,7 +18,7 @@ public:
 
 public slots:
     void tryAuthenticate(std::shared_ptr<User> user, std::shared_ptr<Connection> conn);
-    void addUser(User*);
+    void addUser(std::shared_ptr<User> user, std::shared_ptr<Connection> conn);
 
 signals:
     void authenticated();

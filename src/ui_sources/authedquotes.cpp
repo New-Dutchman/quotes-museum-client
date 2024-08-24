@@ -1,7 +1,6 @@
 #include "authedquotes.h"
 #include "addownerdialog.h"
 #include "dialogupdatequote.h"
-#include "clickablelabel.h"
 #include "inputowner.h"
 #include "qmessagebox.h"
 #include "quoteinput.h"
@@ -24,8 +23,15 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     searchTab = std::make_unique<SearchTab>(_quotesApi, this);
     ui->searchTab->layout()->addWidget(searchTab.get());
 
-    ui->quotesLabelsLayout->addWidget(new ClickableLabel("Favourite ones", &AuthedQuotes::updateFavsQuotesRequest, this));
-    ui->quotesLabelsLayout->addWidget(new ClickableLabel("Added ones", &AuthedQuotes::updateAddedQuotesRequest, this));
+    favouriteQuotesLabel = new ClickableLabel("Favourite ones", &AuthedQuotes::updateFavsQuotesRequest, this);
+    addedQuotesLabel = new ClickableLabel("Added ones", &AuthedQuotes::updateAddedQuotesRequest, this);
+
+    QFont font = favouriteQuotesLabel->font();
+    font.setBold(true);
+    favouriteQuotesLabel->setFont(font);
+
+    ui->quotesLabelsLayout->addWidget(favouriteQuotesLabel);
+    ui->quotesLabelsLayout->addWidget(addedQuotesLabel);
 
     _apiThread = new QThread(this);
 
@@ -105,6 +111,8 @@ AuthedQuotes::~AuthedQuotes()
     delete _owners;
     delete _attrs;
     delete _features;
+    delete favouriteQuotesLabel;
+    delete addedQuotesLabel;
 }
 
 void AuthedQuotes::getCoreTable(QuotesApi::CoreTables what)
@@ -201,11 +209,24 @@ void AuthedQuotes::onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>*
 
 void AuthedQuotes::updateAddedQuotesRequest()
 {
+    changeLabelsState();
     emit sendUpdateAddedQuotesRequest();
+}
+
+void AuthedQuotes::changeLabelsState()
+{
+    QFont font = favouriteQuotesLabel->font();
+    font.setBold(!font.bold());
+    favouriteQuotesLabel->setFont(font);
+
+    QFont font1 = addedQuotesLabel->font();
+    font1.setBold(!font1.bold());
+    addedQuotesLabel->setFont(font1);
 }
 
 void AuthedQuotes::updateFavsQuotesRequest()
 {
+    changeLabelsState();
     emit ui->updateFavs->clicked();
 }
 

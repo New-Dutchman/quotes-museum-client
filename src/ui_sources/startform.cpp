@@ -26,7 +26,8 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
 
     QObject::connect(completer, QOverload<const QString &>::of(&QCompleter::activated), this, &StartForm::completeUserPassword);
 
-    QObject::connect(ui->registerBtn, &QPushButton::clicked, (MainWindow*)this->parent(), &MainWindow::registerForm);
+    QObject::connect(ui->registerBtn, &QPushButton::clicked, this, &StartForm::onRegisterClick);
+    QObject::connect(this, &StartForm::registerRequest, (MainWindow*)this->parent(), &MainWindow::registerForm);
 
     QObject::connect(ui->defaultUserCheckBox, &QAbstractButton::clicked, this, &StartForm::defaultUserChecked);
     QObject::connect(ui->defaultServerCheckBox, &QAbstractButton::clicked, this, &StartForm::defaultConnectionChecked);
@@ -82,6 +83,20 @@ void StartForm::defaultConnectionChecked()
         ui->hostnameLE->setDisabled(false);
         ui->portLE->setDisabled(false);
     }
+}
+
+void StartForm::onRegisterClick()
+{
+    if (!ui->defaultUserCheckBox->isChecked())
+    {
+        _user->username(ui->usernameLE->text(), _user->passwd());
+        _user->passwd(ui->passwordLE->text(), _user->passwd());
+    }
+
+    _conn->port(ui->portLE->text().toInt());
+    _conn->server(ui->hostnameLE->text());
+
+    emit registerRequest();
 }
 
 void StartForm::readUsers()
