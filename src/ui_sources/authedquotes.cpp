@@ -33,9 +33,6 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     ui->quotesLabelsLayout->addWidget(favouriteQuotesLabel);
     ui->quotesLabelsLayout->addWidget(addedQuotesLabel);
 
-    _apiThread = new QThread(this);
-
-    connect(this, &AuthedQuotes::destroyed, _apiThread, &QThread::quit);
     //connect(_apiThread, &QThread::finished, _apiThread, &QThread::deleteLater);
 
     ui->usernameLabel->setText(username);
@@ -85,9 +82,6 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     // delete quote
     QObject::connect(this, &AuthedQuotes::sendDeleteQuoteRequest, _quotesApi.get(), &QuotesApiRepresenter::deleteQuote);
     QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendIfQuoteDeletedResponse, this, &AuthedQuotes::deleteQuoteResponse);
-
-    _quotesApi->moveToThread(_apiThread);
-    _apiThread->start();
 
     if (username == "John Doe")
     {

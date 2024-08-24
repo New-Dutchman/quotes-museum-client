@@ -13,7 +13,7 @@ class QuotesApiRepresenter: public QObject
 
 public:
     QuotesApiRepresenter();
-    QuotesApiRepresenter(std::shared_ptr<Connection> conn, std::shared_ptr<User> user);
+    // QuotesApiRepresenter(std::shared_ptr<Connection> conn, std::shared_ptr<User> user);
     ~QuotesApiRepresenter();
 
 public slots:

@@ -76,8 +76,6 @@ private:
 
     Ui::AuthedQuotes *ui;
 
-    QThread* _apiThread;
-
     void freeQuotesLayout(QLayout *l);
     void getCoreTable(QuotesApi::CoreTables);
     std::shared_ptr<QuotesApiRepresenter> _quotesApi;

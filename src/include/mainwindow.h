@@ -41,7 +41,8 @@ private:
     QWidget *widget;
 
     std::shared_ptr<QuotesApiRepresenter> _apiRepresenter;
-
+    QThread* _apiThread;
+    
     std::shared_ptr<Connection> _conn;
     std::shared_ptr<User> _user;
 };

@@ -23,6 +23,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     QObject::connect(this, &MainWindow::pleaseRegisterNewUserRequest, _apiRepresenter.get(), &QuotesApiRepresenter::addUser);
     QObject::connect(_apiRepresenter.get(), &QuotesApiRepresenter::addedUserAnswer, this, &MainWindow::checkAddedUser);
+
+    _apiThread = new QThread(this);
+    connect(this, &AuthedQuotes::destroyed, _apiThread, &QThread::quit);
+
+    _apiRepresenter->moveToThread(_apiThread);
+    _apiThread->start();
 }
 
 MainWindow::~MainWindow()
@@ -33,7 +39,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::startForm()
 {
-    _user->passwd(_user->passwd(), _user->defaultPasswd());
+    _user->passwd(_user->defaultPasswd(), _user->passwd());
     _user->username(_user->defaultUsername(), _user->passwd());
     ui-> verticalLayout->removeWidget(widget);
     delete(widget);

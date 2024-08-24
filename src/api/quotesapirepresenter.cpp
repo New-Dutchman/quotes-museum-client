@@ -14,10 +14,10 @@ QuotesApiRepresenter::QuotesApiRepresenter(): QObject(nullptr)
     _authTimer = new QTimer(this);
 }
 
-QuotesApiRepresenter::QuotesApiRepresenter(std::shared_ptr<Connection> conn, std::shared_ptr<User> user)
-{
+// QuotesApiRepresenter::QuotesApiRepresenter(std::shared_ptr<Connection> conn, std::shared_ptr<User> user)
+// {
 
-}
+// }
 
 QuotesApiRepresenter::~QuotesApiRepresenter()
 {
