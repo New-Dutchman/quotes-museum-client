@@ -92,7 +92,7 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
         ui->logoutBtn->setDisabled(false);
         //this->removeTab(0);
         this->setCurrentIndex(1);
-    } else emit ui->updateFavs->clicked();
+    } else emit sendUpdateFavsQuotesRequest();
 
     getCoreTable(QuotesApi::CoreTables::features);
     getCoreTable(QuotesApi::CoreTables::attrs);
