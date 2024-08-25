@@ -174,7 +174,7 @@ void AuthedQuotes::favouriteQuoteAction(bool success, const QString& message)
         msg.exec();
         return;
     }
-    updateFavsQuotesRequest();
+    onUpdatePageClicked();
 }
 
 void AuthedQuotes::favouriteQuoteFromSingleCard(SingleQuoteModel *model)
