@@ -10,7 +10,7 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
 {
     ui->setupUi(this);
     ui->formLayout->setAlignment(ui->defaultUserCheckBox, Qt::AlignRight);
-
+    ui->defaultServerCheckBox->setChecked(true);
     ui->defaultUserCheckBox->setLayoutDirection(Qt::RightToLeft);
     ui->defaultServerCheckBox->setLayoutDirection(Qt::RightToLeft);
     readUsers();
@@ -32,6 +32,7 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
     QObject::connect(ui->defaultUserCheckBox, &QAbstractButton::clicked, this, &StartForm::defaultUserChecked);
     QObject::connect(ui->defaultServerCheckBox, &QAbstractButton::clicked, this, &StartForm::defaultConnectionChecked);
 
+    emit ui->defaultServerCheckBox->clicked();
 }
 
 StartForm::~StartForm()

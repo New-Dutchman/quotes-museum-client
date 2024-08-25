@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    _conn = std::make_shared<Connection>();
+    Connection con;
+    _conn = std::make_shared<Connection>(con);
     _user = std::make_shared<User>();
     widget = new StartForm(_user, _conn, this);
     _apiRepresenter = std::make_shared<QuotesApiRepresenter>();
