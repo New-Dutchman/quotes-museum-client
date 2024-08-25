@@ -295,14 +295,16 @@ void AuthedQuotes::createResponseWindow(QString errorMessage, bool success)
 
 void AuthedQuotes::addQuoteResponse(bool success)
 {
-    createResponseWindow("Error occured while was adding quote =(", success); 
+    createResponseWindow("Error occured while was adding quote =(", success);
+    if (success)
+        onUpdatePageClicked();
 }
 
 void AuthedQuotes::updateQuoteResponse(QString success)
 {
+    onUpdatePageClicked();
     QString text = success;
     QMessageBox msg(this);
-
     msg.setText(text);
     msg.exec();
 }
@@ -310,11 +312,15 @@ void AuthedQuotes::updateQuoteResponse(QString success)
 void AuthedQuotes::deleteQuoteResponse(bool success)
 {
     createResponseWindow("Error occured while was deleting quote =(", success);
+    if (success)
+        onUpdatePageClicked();
 }
 
 void AuthedQuotes::addOwnerResponse(bool success)
 {
     createResponseWindow("Error occured while was adding owner =(", success);
+    if (success)
+        onUpdatePageClicked();
 }
 
 void AuthedQuotes::removeFavouriteQuoteFromSingleCard(SingleQuoteModel* model)
@@ -324,7 +330,12 @@ void AuthedQuotes::removeFavouriteQuoteFromSingleCard(SingleQuoteModel* model)
 
 void AuthedQuotes::onUpdatePageClicked()
 {
-    getCoreTable(QuotesApi::CoreTables::features);
-    getCoreTable(QuotesApi::CoreTables::attrs);
+    // getCoreTable(QuotesApi::CoreTables::features);
+    // getCoreTable(QuotesApi::CoreTables::attrs);
     getCoreTable(QuotesApi::CoreTables::owners);
+    if (favouriteQuotesLabel->font().bold())
+        updateFavsQuotesRequest();
+    else updateAddedQuotesRequest();
+    
+    emit ui->ownersComdoBox->currentTextChanged(ui->ownersComdoBox->currentText());
 }
