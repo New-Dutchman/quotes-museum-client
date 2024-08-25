@@ -86,6 +86,10 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     QObject::connect(this, &AuthedQuotes::sendDeleteQuoteRequest, _quotesApi.get(), &QuotesApiRepresenter::deleteQuote);
     QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendIfQuoteDeletedResponse, this, &AuthedQuotes::deleteQuoteResponse);
 
+    // previous and next buttons
+    QObject::connect(ui->previousGroupBtn, &QPushButton::clicked, this, &AuthedQuotes::onPreviousBtnClicked);
+    QObject::connect(ui->nextGroupBtn, &QPushButton::clicked, this, &AuthedQuotes::onNextBtnClickedClick);
+
     if (username == "John Doe")
     {
         ui->userTab->setDisabled(true);
@@ -168,7 +172,9 @@ void AuthedQuotes::favouriteQuoteAction(bool success, const QString& message)
 
         msg.setText("Error occupied while was " + message + " quote");
         msg.exec();
+        return;
     }
+    updateFavsQuotesRequest();
 }
 
 void AuthedQuotes::favouriteQuoteFromSingleCard(SingleQuoteModel *model)
@@ -326,6 +332,7 @@ void AuthedQuotes::addOwnerResponse(bool success)
 void AuthedQuotes::removeFavouriteQuoteFromSingleCard(SingleQuoteModel* model)
 {
     emit removeFavouriteQuoteRequest(model);
+    // updateFavsQuotesRequest();
 }
 
 void AuthedQuotes::onUpdatePageClicked()
@@ -338,4 +345,20 @@ void AuthedQuotes::onUpdatePageClicked()
     else updateAddedQuotesRequest();
     
     emit ui->ownersComdoBox->currentTextChanged(ui->ownersComdoBox->currentText());
+}
+
+void AuthedQuotes::onPreviousBtnClicked()
+{
+    int currentIndex = ui->ownersComdoBox->currentIndex();
+    if (currentIndex == 0)
+        ui->ownersComdoBox->setCurrentIndex(ui->ownersComdoBox->count() - 1);
+    else ui->ownersComdoBox->setCurrentIndex(currentIndex - 1);
+}
+
+void AuthedQuotes::onNextBtnClickedClick()
+{
+    int currentIndex = ui->ownersComdoBox->currentIndex();
+    if (currentIndex == ui->ownersComdoBox->count() - 1)
+        ui->ownersComdoBox->setCurrentIndex(0);
+    else ui->ownersComdoBox->setCurrentIndex(currentIndex + 1);
 }

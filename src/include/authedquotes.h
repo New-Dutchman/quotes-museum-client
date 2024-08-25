@@ -69,6 +69,10 @@ private slots:
 
     void onUpdatePageClicked();
 
+    // left-right buttons
+    void onPreviousBtnClicked();
+    void onNextBtnClickedClick();
+
 private:
     std::unique_ptr<SearchTab> searchTab;
 
