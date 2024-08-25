@@ -52,7 +52,10 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     // get quotes by owner and favourite ones
     QObject::connect(ui->ownersComdoBox, &QComboBox::currentTextChanged, _quotesApi.get(), &QuotesApiRepresenter::getQuoteCards);
     QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendQuoteOwnerCards, this, &AuthedQuotes::onOwnersComdoBoxCurrentTextChanged);
-    QObject::connect(ui->updateFavs, &QPushButton::clicked, _quotesApi.get(), &QuotesApiRepresenter::getFavouriteCards);
+    
+    QObject::connect(this, &AuthedQuotes::sendUpdateFavsQuotesRequest, _quotesApi.get(), &QuotesApiRepresenter::getFavouriteCards);
+    
+    QObject::connect(ui->updateFavs, &QPushButton::clicked, this, &AuthedQuotes::onUpdatePageClicked);
 
     QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendQuoteFavouriteCards, this, &AuthedQuotes::onUpdateFavsClicked);
 
@@ -221,7 +224,8 @@ void AuthedQuotes::changeLabelsState()
 void AuthedQuotes::updateFavsQuotesRequest()
 {
     changeLabelsState();
-    emit ui->updateFavs->clicked();
+    // emit ui->updateFavs->clicked();
+    emit sendUpdateFavsQuotesRequest();
 }
 
 void AuthedQuotes::onUpdateAddedClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes)
@@ -288,7 +292,7 @@ void AuthedQuotes::createResponseWindow(QString errorMessage, bool success)
 
 void AuthedQuotes::addQuoteResponse(bool success)
 {
-    createResponseWindow("Error occured while was adding quote =(", success);
+    createResponseWindow("Error occured while was adding quote =(", success); 
 }
 
 void AuthedQuotes::updateQuoteResponse(QString success)
@@ -313,4 +317,11 @@ void AuthedQuotes::addOwnerResponse(bool success)
 void AuthedQuotes::removeFavouriteQuoteFromSingleCard(SingleQuoteModel* model)
 {
     emit removeFavouriteQuoteRequest(model);
+}
+
+void AuthedQuotes::onUpdatePageClicked()
+{
+    getCoreTable(QuotesApi::CoreTables::features);
+    getCoreTable(QuotesApi::CoreTables::attrs);
+    getCoreTable(QuotesApi::CoreTables::owners);
 }

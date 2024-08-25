@@ -67,6 +67,8 @@ private slots:
     void addOwnerResponse(bool);
     void updateQuoteResponse(QString);
 
+    void onUpdatePageClicked();
+
 private:
     std::unique_ptr<SearchTab> searchTab;
 
