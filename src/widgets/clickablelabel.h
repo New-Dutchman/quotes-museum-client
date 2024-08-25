@@ -13,6 +13,7 @@ public:
     , _parent(parent)
     , func(onPressAction)
     {
+        setCursor(Qt::PointingHandCursor);
         QFont defaultFont("Segou UI", 24);
         this->setText(label);
         this->setFont(defaultFont);

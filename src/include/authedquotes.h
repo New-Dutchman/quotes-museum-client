@@ -57,7 +57,7 @@ private slots:
     void onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void onUpdateAddedClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void updateAddedQuotesRequest();
-    void changeLabelsState();
+    void changeLabelsState(ClickableLabel<AuthedQuotes>* caller);
     void updateFavsQuotesRequest();
 
     // void addFavourite(bool);

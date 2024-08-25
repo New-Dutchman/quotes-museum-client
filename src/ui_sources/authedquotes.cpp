@@ -206,12 +206,15 @@ void AuthedQuotes::onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>*
 
 void AuthedQuotes::updateAddedQuotesRequest()
 {
-    changeLabelsState();
+    changeLabelsState(addedQuotesLabel);
     emit sendUpdateAddedQuotesRequest();
 }
 
-void AuthedQuotes::changeLabelsState()
+void AuthedQuotes::changeLabelsState(ClickableLabel<AuthedQuotes>* caller)
 {
+    if (caller->font().bold())
+        return;
+
     QFont font = favouriteQuotesLabel->font();
     font.setBold(!font.bold());
     favouriteQuotesLabel->setFont(font);
@@ -223,7 +226,7 @@ void AuthedQuotes::changeLabelsState()
 
 void AuthedQuotes::updateFavsQuotesRequest()
 {
-    changeLabelsState();
+    changeLabelsState(favouriteQuotesLabel);
     // emit ui->updateFavs->clicked();
     emit sendUpdateFavsQuotesRequest();
 }
