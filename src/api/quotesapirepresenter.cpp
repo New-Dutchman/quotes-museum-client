@@ -43,8 +43,10 @@ void QuotesApiRepresenter::getCoreTable(QuotesApi::CoreTables ct)
     {
     case QuotesApi::owners:
         emit sendOwnersValues(values);
+        break;
     case QuotesApi::attrs:
         emit sendAttrsValues(values);
+        break;
     case QuotesApi::features:
         emit sendFeaturesValues(values);
         break;

@@ -100,7 +100,7 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 
     getCoreTable(QuotesApi::CoreTables::features);
     getCoreTable(QuotesApi::CoreTables::attrs);
-    getCoreTable(QuotesApi::CoreTables::owners);    
+    getCoreTable(QuotesApi::CoreTables::owners);
 }
 
 AuthedQuotes::~AuthedQuotes()
@@ -324,9 +324,9 @@ void AuthedQuotes::deleteQuoteResponse(bool success)
 
 void AuthedQuotes::addOwnerResponse(bool success)
 {
-    createResponseWindow("Error occured while was adding owner =(", success);
+    createResponseWindow("Error occured while was adding group =(", success);
     if (success)
-        onUpdatePageClicked();
+        getCoreTable(QuotesApi::CoreTables::owners);
 }
 
 void AuthedQuotes::removeFavouriteQuoteFromSingleCard(SingleQuoteModel* model)
@@ -339,7 +339,7 @@ void AuthedQuotes::onUpdatePageClicked()
 {
     // getCoreTable(QuotesApi::CoreTables::features);
     // getCoreTable(QuotesApi::CoreTables::attrs);
-    getCoreTable(QuotesApi::CoreTables::owners);
+    // getCoreTable(QuotesApi::CoreTables::owners);
     if (favouriteQuotesLabel->font().bold())
         updateFavsQuotesRequest();
     else updateAddedQuotesRequest();
