@@ -6,6 +6,8 @@
 #include <QMouseEvent>
 #include <QMenu>
 
+class AuthedQuotes;
+
 namespace Ui {
 class SingleQuoteCard;
 }
@@ -21,7 +23,7 @@ public:
         Favourite = 1
     };
 
-    explicit SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QuoteMode mode, QWidget *parent = nullptr);
+    explicit SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QuoteMode mode, AuthedQuotes *parent);
     ~SingleQuoteCard();
 
 public: signals:

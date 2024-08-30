@@ -17,7 +17,7 @@ class AuthedQuotes : public QTabWidget
     Q_OBJECT
 
 public:
-    explicit AuthedQuotes(std::shared_ptr<QuotesApiRepresenter>, QString username, QWidget *parent = nullptr);
+    explicit AuthedQuotes(std::shared_ptr<QuotesApiRepresenter>, QString username, QWidget *parent);
 
     ~AuthedQuotes();
 
@@ -75,8 +75,6 @@ private slots:
 
 private:
     std::unique_ptr<SearchTab> searchTab;
-
-    friend SearchTab;
 
     void createResponseWindow(QString, bool);
 

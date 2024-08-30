@@ -3,7 +3,7 @@
 #include "ui_singlequotecard.h"
 #include "quotecontextmenu.h"
 
-SingleQuoteCard::SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QuoteMode mode, QWidget *parent)
+SingleQuoteCard::SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QuoteMode mode, AuthedQuotes *parent)
     : QWidget(parent)
     , options(mode)
     , ui(new Ui::SingleQuoteCard)
@@ -32,17 +32,18 @@ SingleQuoteCard::SingleQuoteCard(std::shared_ptr<SingleQuoteModel> quote, QuoteM
         l->setFont(QFont("Segoe UI", 10));
         ui->attrsLayout->addWidget(l);
     }
-
+    
+    AuthedQuotes* aq = static_cast<AuthedQuotes*>(this->parent());
     // QObject::connect(ui->updateQuoteBtn, &QPushButton::clicked, this, &SingleQuoteCard::onUpdateClicked);
-    QObject::connect(this, &SingleQuoteCard::updateInfo, (AuthedQuotes*)parent, &AuthedQuotes::updateQuoteFromSingleCard);
+    QObject::connect(this, &SingleQuoteCard::updateInfo, aq, &AuthedQuotes::updateQuoteFromSingleCard);
 
     // QObject::connect(ui->addFavsBtn, &QPushButton::clicked, this, &SingleQuoteCard::onAddFavClicked);
-    QObject::connect(this, &SingleQuoteCard::addFavourite, (AuthedQuotes*)parent, &AuthedQuotes::favouriteQuoteFromSingleCard);
+    QObject::connect(this, &SingleQuoteCard::addFavourite, aq, &AuthedQuotes::favouriteQuoteFromSingleCard);
 
     // QObject::connect(ui->deleteCardBtn, &QPushButton::clicked, this, &SingleQuoteCard::onDeletCardClicked);
-    QObject::connect(this, &SingleQuoteCard::deleteCard, (AuthedQuotes*)parent, &AuthedQuotes::aboutToDeleteQuoteFromSingleCard);
+    QObject::connect(this, &SingleQuoteCard::deleteCard, aq, &AuthedQuotes::aboutToDeleteQuoteFromSingleCard);
 
-    QObject::connect(this, &SingleQuoteCard::removeFavourite, (AuthedQuotes*)parent, &AuthedQuotes::removeFavouriteQuoteFromSingleCard);
+    QObject::connect(this, &SingleQuoteCard::removeFavourite, aq, &AuthedQuotes::removeFavouriteQuoteFromSingleCard);
 
 }
 
@@ -54,6 +55,9 @@ SingleQuoteCard::~SingleQuoteCard()
 void SingleQuoteCard::onUpdateClicked()
 {
     qDebug() << "SingleQuoteCard::onUpdateClicked";
+
+    AuthedQuotes* aq = static_cast<AuthedQuotes*>(this->parent());
+
     emit updateInfo(_model.get());
 }
 

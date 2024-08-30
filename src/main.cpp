@@ -4,9 +4,6 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-void onClick();
-std::string connectDB();
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
