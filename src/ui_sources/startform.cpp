@@ -21,6 +21,7 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
     ui->usernameLE->setCompleter(completer);
 
     QObject::connect(ui->loginBtn, &QPushButton::clicked, this, &StartForm::onLoginClick);
+    QObject::connect(ui->passwordLE, &QLineEdit::returnPressed, this, &StartForm::onLoginClick);
     QObject::connect(this, &StartForm::loginRequest, (MainWindow*)this->parent(), &MainWindow::authorization);
     QObject::connect((MainWindow*)this->parent(), &MainWindow::rememberUser, this, &StartForm::rememberUser);
 
@@ -31,6 +32,8 @@ StartForm::StartForm(std::shared_ptr<User> user, std::shared_ptr<Connection> con
 
     QObject::connect(ui->defaultUserCheckBox, &QAbstractButton::clicked, this, &StartForm::defaultUserChecked);
     QObject::connect(ui->defaultServerCheckBox, &QAbstractButton::clicked, this, &StartForm::defaultConnectionChecked);
+
+    QObject::connect(ui->usernameLE, &QLineEdit::returnPressed, this, [this](){ui->passwordLE->setFocus();});
 
     emit ui->defaultServerCheckBox->clicked();
 }
@@ -136,4 +139,5 @@ void StartForm::rememberUser()
 void StartForm::completeUserPassword(const QString& username)
 {
     ui->passwordLE->setText(_users[username]);
+    emit onLoginClick();
 }
