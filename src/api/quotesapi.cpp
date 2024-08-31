@@ -100,3 +100,13 @@ API_METHOD(searchQuote, "/quotes/search", const QString& quote)
     QUrlQuery param;
     param.addQueryItem("quote", quote);
 NO_BODY_REQUEST(get)
+
+API_METHOD(searchQuote, "/quotes/search", const QString& quote, const QStringList* features, bool negative)
+    QUrlQuery param;
+    param.addQueryItem("quote", quote);
+    for (auto& feature : *features) 
+    {
+        param.addQueryItem("features", feature);
+    }
+    param.addQueryItem("negative", negative? "true" : "false");
+NO_BODY_REQUEST(get)

@@ -24,6 +24,7 @@ public:
 
 signals:
     void searchForQuoteRequest(const QString& quote);
+    void searchForQuoteRequestWithFilters(const QString& quote, const QStringList* filters, bool negative);
     void sendToUncheckMenu(const QString &title);
 
 public slots:

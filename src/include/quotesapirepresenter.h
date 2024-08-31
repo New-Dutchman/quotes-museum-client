@@ -56,6 +56,7 @@ public slots:
     void updateQuote(SingleQuoteModel *changed, SingleQuoteModel *original);
 
     void searchQuote(const QString&);
+    void searchQuoteWithFilter(const QString&, const QStringList* filters, bool negative);
 
 private:
     std::unique_ptr<QuotesApi> _api;

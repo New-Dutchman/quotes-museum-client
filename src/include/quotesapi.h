@@ -30,6 +30,7 @@ public:
     QNetworkReply* addOwner(std::pair<QString, QString>);
     QNetworkReply* updateQuote(SingleQuoteModel* changed, SingleQuoteModel* original);
     QNetworkReply* searchQuote(const QString&);
+    QNetworkReply* searchQuote(const QString&, const QStringList* features, bool negative);
 
     inline int authenticate() {return _authenticate->auth(); };
     inline QNetworkReply* addUser() {return _authenticate->addUser(); };

@@ -19,7 +19,10 @@ SearchTab::SearchTab(std::shared_ptr<QuotesApiRepresenter> representer, AuthedQu
 
     QObject::connect(ui->searchQuoteBtn, &QPushButton::clicked, this, &SearchTab::sendSearchQuoteRequest);
     QObject::connect(ui->quoteLE, &QLineEdit::returnPressed, this, &SearchTab::sendSearchQuoteRequest);
+    
     QObject::connect(this, &SearchTab::searchForQuoteRequest, representer.get(), &QuotesApiRepresenter::searchQuote);
+    QObject::connect(this, &SearchTab::searchForQuoteRequestWithFilters, representer.get(), &QuotesApiRepresenter::searchQuoteWithFilter);
+
     QObject::connect(representer.get(), &QuotesApiRepresenter::searchQuoteResponse, this, &SearchTab::searchForQuoteResponse);
 
     QObject::connect(_chooseAttrs, &CheckableMenu::actionChosen, this, &SearchTab::addChosenAttrs);
@@ -58,7 +61,10 @@ void SearchTab::sendSearchQuoteRequest()
     if (ui->quoteLE->text().trimmed() == "")
         return;
     ui->startText->hide();
-    emit searchForQuoteRequest(ui->quoteLE->text());
+    if (_chosenAttrs.size() == 0)
+        emit searchForQuoteRequest(ui->quoteLE->text());
+    else
+        emit searchForQuoteRequestWithFilters(ui->quoteLE->text(), &_chosenAttrs, ui->excludeAttrsCheckBox->isChecked());
 }
 
 void SearchTab::freeQuotesLayout(QLayout* l)
