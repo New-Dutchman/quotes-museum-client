@@ -20,9 +20,6 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     ui->homepageScrollArea->horizontalScrollBar()->setEnabled(false);
     ui->quotesScrollArea->horizontalScrollBar()->setEnabled(false);
 
-    searchTab = std::make_unique<SearchTab>(_quotesApi, this);
-    ui->searchTab->layout()->addWidget(searchTab.get());
-
     favouriteQuotesLabel = new ClickableLabel("Favourite ones", &AuthedQuotes::updateFavsQuotesRequest, this);
     addedQuotesLabel = new ClickableLabel("Added ones", &AuthedQuotes::updateAddedQuotesRequest, this);
 
@@ -98,8 +95,8 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
         this->setCurrentIndex(1);
     } else emit sendUpdateFavsQuotesRequest();
 
-    getCoreTable(QuotesApi::CoreTables::features);
     getCoreTable(QuotesApi::CoreTables::attrs);
+    getCoreTable(QuotesApi::CoreTables::features);
     getCoreTable(QuotesApi::CoreTables::owners);
 }
 
@@ -134,6 +131,8 @@ void AuthedQuotes::setOwners(QStringList *owners)
 void AuthedQuotes::setAttrs(QStringList *attrs)
 {
     _attrs = attrs;
+    searchTab = std::make_unique<SearchTab>(_quotesApi, this);
+    ui->searchTab->layout()->addWidget(searchTab.get());
 }
 
 void AuthedQuotes::setFeatures(QStringList *features)
@@ -210,7 +209,7 @@ void AuthedQuotes::onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>*
     delete quotes;
 }
 
-void AuthedQuotes::updateAddedQuotesRequest()
+void AuthedQuotes::updateAddedQuotesRequest(ClickableLabel<AuthedQuotes>*)
 {
     changeLabelsState(addedQuotesLabel);
     emit sendUpdateAddedQuotesRequest();
@@ -230,7 +229,7 @@ void AuthedQuotes::changeLabelsState(ClickableLabel<AuthedQuotes>* caller)
     addedQuotesLabel->setFont(font1);
 }
 
-void AuthedQuotes::updateFavsQuotesRequest()
+void AuthedQuotes::updateFavsQuotesRequest(ClickableLabel<AuthedQuotes>*)
 {
     changeLabelsState(favouriteQuotesLabel);
     // emit ui->updateFavs->clicked();
@@ -341,8 +340,8 @@ void AuthedQuotes::onUpdatePageClicked()
     // getCoreTable(QuotesApi::CoreTables::attrs);
     // getCoreTable(QuotesApi::CoreTables::owners);
     if (favouriteQuotesLabel->font().bold())
-        updateFavsQuotesRequest();
-    else updateAddedQuotesRequest();
+        updateFavsQuotesRequest(nullptr);
+    else updateAddedQuotesRequest(nullptr);
     
     emit ui->ownersComdoBox->currentTextChanged(ui->ownersComdoBox->currentText());
 }

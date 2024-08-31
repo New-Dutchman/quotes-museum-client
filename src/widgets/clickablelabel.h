@@ -8,7 +8,7 @@ template <typename QClass>
 class ClickableLabel: public QLabel
 {
 public:
-    explicit ClickableLabel(const QString& label, void (QClass::*onPressAction)(void), QClass* parent)
+    explicit ClickableLabel(const QString& label, void (QClass::*onPressAction)(ClickableLabel<QClass>*), QClass* parent)
     : QLabel(parent)
     , _parent(parent)
     , func(onPressAction)
@@ -21,7 +21,7 @@ public:
     ~ClickableLabel() { }
 
 private:
-    void (QClass::*func)(void);
+    void (QClass::*func)(ClickableLabel<QClass>*);
     QClass* _parent;
 
 protected:
@@ -29,7 +29,7 @@ protected:
     {
         if (event->button() == Qt::LeftButton && _parent && func) 
         {
-            (_parent->*func)();
+            (_parent->*func)(this);
         }
         QLabel::mousePressEvent(event);
     }

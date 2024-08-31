@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,10">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,10">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,1">
      <item>
@@ -40,6 +40,31 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="optionsLayout" stretch="3,0">
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <layout class="QGridLayout" name="chosenAttrsLayout"/>
+     </item>
+     <item alignment="Qt::AlignmentFlag::AlignRight">
+      <widget class="QCheckBox" name="excludeAttrsCheckBox">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
+       <property name="whatsThis">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>Rule out</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
@@ -53,7 +78,7 @@
         <x>0</x>
         <y>0</y>
         <width>778</width>
-        <height>541</height>
+        <height>506</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">

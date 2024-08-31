@@ -21,6 +21,8 @@ public:
 
     ~AuthedQuotes();
 
+    const inline QStringList* getAttrs() const {return _attrs; }
+
 signals:
     void sendGetCoreTableRequest(QuotesApi::CoreTables);
 
@@ -56,9 +58,9 @@ private slots:
     void onOwnersComdoBoxCurrentTextChanged(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void onUpdateAddedClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
-    void updateAddedQuotesRequest();
+    void updateAddedQuotesRequest(ClickableLabel<AuthedQuotes>*);
     void changeLabelsState(ClickableLabel<AuthedQuotes>* caller);
-    void updateFavsQuotesRequest();
+    void updateFavsQuotesRequest(ClickableLabel<AuthedQuotes>*);
 
     // void addFavourite(bool);
     void favouriteQuoteAction(bool, const QString&);
