@@ -11,10 +11,10 @@ SearchTab::SearchTab(std::shared_ptr<QuotesApiRepresenter> representer, AuthedQu
     , _aqPtr(parent)
 {
     ui->setupUi(this);
-    const QStringList* attrs = parent->getAttrs();
+    const QStringList* feats = parent->getFeatures();
     // int columnCount = attrs->length() / 3;
     ui->chosenAttrsLayout->setDefaultPositioning(3, Qt::Orientation::Horizontal);
-    _chooseAttrs = new CheckableMenu("choose attributes", attrs, this);
+    _chooseAttrs = new CheckableMenu("choose features", feats, this);
     ui->optionsLayout->insertWidget(0, _chooseAttrs);
 
     QObject::connect(ui->searchQuoteBtn, &QPushButton::clicked, this, &SearchTab::sendSearchQuoteRequest);

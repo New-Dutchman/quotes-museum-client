@@ -131,13 +131,13 @@ void AuthedQuotes::setOwners(QStringList *owners)
 void AuthedQuotes::setAttrs(QStringList *attrs)
 {
     _attrs = attrs;
-    searchTab = std::make_unique<SearchTab>(_quotesApi, this);
-    ui->searchTab->layout()->addWidget(searchTab.get());
 }
 
 void AuthedQuotes::setFeatures(QStringList *features)
 {
     _features = features;
+    searchTab = std::make_unique<SearchTab>(_quotesApi, this);
+    ui->searchTab->layout()->addWidget(searchTab.get());
 }
 
 void AuthedQuotes::freeQuotesLayout(QLayout* l)

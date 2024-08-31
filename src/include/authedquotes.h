@@ -21,7 +21,7 @@ public:
 
     ~AuthedQuotes();
 
-    const inline QStringList* getAttrs() const {return _attrs; }
+    const inline QStringList* getFeatures() const {return _features; }
 
 signals:
     void sendGetCoreTableRequest(QuotesApi::CoreTables);
