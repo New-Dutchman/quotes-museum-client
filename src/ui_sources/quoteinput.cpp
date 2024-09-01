@@ -20,7 +20,7 @@ QuoteInput::QuoteInput(QList<QString>* owners, QList<QString>* attrs, QList<QStr
 
     foreach(s, *attrs)
     {
-        QWidget *cb = new QCheckBox(s, this);
+        QWidget *cb = new QLabel(s, this);
         QWidget *le = new QLineEdit(this);
 
         //cb->setObjectName(s);
@@ -30,20 +30,12 @@ QuoteInput::QuoteInput(QList<QString>* owners, QList<QString>* attrs, QList<QStr
         le->setFont(QFont("Segoe", 14));
         le->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Maximum);
 
-        QHBoxLayout *l = new QHBoxLayout(this);
-        l->addWidget(cb);
-        l->addWidget(le);
-
-        l->setObjectName(s + "_big_le");
-
-        ui->attrLayout->addLayout(l);
-
+        ui->formLayout->addRow(cb, le);
     }
 
     foreach(s, *features)
     {
         QWidget *cb1 = new QCheckBox(s, this);
-
         ui->featuresLayout->addWidget(cb1);
     }
 
@@ -70,15 +62,13 @@ QuoteInput::QuoteInput(QList<QString>* owners, QList<QString>* attrs, QList<QStr
         if (model->features().contains(w->text())) w->setChecked(true);
     }
 
-    qDebug() << ui->attrLayout->count();
-    for (int lay = 0; lay < ui->attrLayout->count(); lay++)
+    for (int row = 0; row < ui->formLayout->rowCount(); row++)
     {
-        QCheckBox* cb = (QCheckBox*)ui->attrLayout->itemAt(lay)->layout()->itemAt(0)->widget();
-        QLineEdit* le = (QLineEdit*)ui->attrLayout->itemAt(lay)->layout()->itemAt(1)->widget();
+        QLabel* cb = (QLabel*)ui->formLayout->itemAt(row, QFormLayout::LabelRole)->widget();
+        QLineEdit* le = (QLineEdit*)ui->formLayout->itemAt(row, QFormLayout::FieldRole)->widget();
 
         if (model->attrs().contains(cb->text()))
         {
-            cb->setChecked(true);
             le->setText(model->attrs().value(cb->text()));
         }
     }
@@ -95,12 +85,13 @@ SingleQuoteModel* QuoteInput::makeQuote()
         if (w->isChecked()) f->append(w->text());
     }
 
-    for (int i = 0; i < ui->attrLayout->count(); i++)
+    for (int row = 0; row < ui->formLayout->rowCount(); row++)
     {
-        QCheckBox* cb = (QCheckBox*)ui->attrLayout->itemAt(i)->layout()->itemAt(0)->widget();
-        QLineEdit* le = (QLineEdit*)ui->attrLayout->itemAt(i)->layout()->itemAt(1)->widget();
-
-        if (cb->isChecked()) a->insert(cb->text(), le->text());
+        QLabel* cb = (QLabel*)ui->formLayout->itemAt(row, QFormLayout::LabelRole)->widget();
+        QLineEdit* le = (QLineEdit*)ui->formLayout->itemAt(row, QFormLayout::FieldRole)->widget();
+        
+        QString label = le->text().trimmed();
+        if (le->text().trimmed() != "") a->insert(cb->text(), le->text());
     }
 
     SingleQuoteModel* data = new SingleQuoteModel(_id,
@@ -120,8 +111,13 @@ void QuoteInput::getReadyToSend()
     auto d = makeQuote();
     switch (_mode)
     {
-    case AddNew: emit sendCreatedQuote(d); break;
-    case UpdateExisting: emit sendUpdatedQuote(d, _model); break;
+        case AddNew: 
+            emit sendCreatedQuote(d); 
+            break;
+            
+        case UpdateExisting: 
+            emit sendUpdatedQuote(d, _model); 
+            break;
     }
 }
 
