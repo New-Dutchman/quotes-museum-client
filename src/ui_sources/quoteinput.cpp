@@ -10,6 +10,22 @@ QuoteInput::QuoteInput(QList<QString>* owners, QList<QString>* attrs, QList<QStr
 
     _mode = AddNew;
 
+    QString styleGB = "QGroupBox {"
+                        "border: 2px solid black;"  // Толщина и цвет обводки
+                        "border-radius: 5px;"       // Скругленные углы (по желанию)
+                        "margin-top: 1.25em;"        // Отступ сверху для заголовка
+                        "}"
+                        "QGroupBox::title {"
+                        "subcontrol-origin: margin;" 
+                        "subcontrol-position: top left;"  // Заголовок сверху слева
+                        "padding: 0 3px;"                // Отступ вокруг заголовка
+                        "color: black;"                  // Цвет текста заголовка
+                        "}";
+
+    ui->attrsGB->setStyleSheet(styleGB);
+
+    ui->featuresGB->setStyleSheet(styleGB);
+
     _id = -1;
     _cites = 0;
     QString s;
@@ -114,7 +130,7 @@ void QuoteInput::getReadyToSend()
         case AddNew: 
             emit sendCreatedQuote(d); 
             break;
-            
+
         case UpdateExisting: 
             emit sendUpdatedQuote(d, _model); 
             break;
