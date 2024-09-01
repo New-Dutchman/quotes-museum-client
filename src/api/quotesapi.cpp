@@ -110,3 +110,7 @@ API_METHOD(searchQuote, "/quotes/search", const QString& quote, const QStringLis
     }
     param.addQueryItem("negative", negative? "true" : "false");
 NO_BODY_REQUEST(get)
+
+API_METHOD(getRandomQuote, "/quotes/random", void)
+QUrlQuery param;
+NO_BODY_REQUEST(get)

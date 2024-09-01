@@ -74,8 +74,11 @@ void MainWindow::login()
 
 void MainWindow::registerForm()
 {
-    QWidget *rw = new RegisterForm(this);
+    RegisterForm *rw = new RegisterForm(this);
     rw->setWindowFlags(Qt::Dialog);
+
+    QObject::connect(rw, &RegisterForm::sendUser, this, &MainWindow::createNewUser);
+
     rw->show();
 }
 

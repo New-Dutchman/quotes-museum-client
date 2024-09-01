@@ -31,6 +31,7 @@ public:
     QNetworkReply* updateQuote(SingleQuoteModel* changed, SingleQuoteModel* original);
     QNetworkReply* searchQuote(const QString&);
     QNetworkReply* searchQuote(const QString&, const QStringList* features, bool negative);
+    QNetworkReply* getRandomQuote();
 
     inline int authenticate() {return _authenticate->auth(); };
     inline QNetworkReply* addUser() {return _authenticate->addUser(); };

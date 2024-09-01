@@ -9,6 +9,7 @@
 #include "mainwindow.h"
 #include <QInputDialog>
 #include <QScrollBar>
+#include "registerform.h"
 
 AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, QString username, QWidget *parent)
     : QTabWidget(parent)
@@ -87,10 +88,17 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     QObject::connect(ui->previousGroupBtn, &QPushButton::clicked, this, &AuthedQuotes::onPreviousBtnClicked);
     QObject::connect(ui->nextGroupBtn, &QPushButton::clicked, this, &AuthedQuotes::onNextBtnClickedClick);
 
+    QObject::connect(ui->getRandomQuoteBtn, &QPushButton::clicked, this, &AuthedQuotes::onGetRandomQuoteClicked);
+    QObject::connect(this, &AuthedQuotes::getRandomQuoteRequest, _quotesApi.get(), &QuotesApiRepresenter::getRandomQuote);
+    QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendRandomQuote, this, &AuthedQuotes::randomQuoteResponse);
+
     if (username == "John Doe")
     {
-        ui->userTab->setDisabled(true);
-        ui->logoutBtn->setDisabled(false);
+        for(auto& w: ui->userTab->findChildren<QWidget*>())
+        {
+            w->setEnabled(false);
+        }
+        ui->logoutBtn->setEnabled(true);
         //this->removeTab(0);
         this->setCurrentIndex(1);
     } else emit sendUpdateFavsQuotesRequest();
@@ -360,4 +368,25 @@ void AuthedQuotes::onNextBtnClickedClick()
     if (currentIndex == ui->ownersComdoBox->count() - 1)
         ui->ownersComdoBox->setCurrentIndex(0);
     else ui->ownersComdoBox->setCurrentIndex(currentIndex + 1);
+}
+
+void AuthedQuotes::onGetRandomQuoteClicked()
+{
+    emit getRandomQuoteRequest();
+}
+
+void AuthedQuotes::randomQuoteResponse(SingleQuoteModel* model)
+{
+    SingleQuoteCard *sqm = new SingleQuoteCard(std::make_shared<SingleQuoteModel>(*model), SingleQuoteCard::QuoteMode::JustWatch, this);
+    sqm->setWindowFlags(Qt::Window);
+    sqm->show();
+
+    delete model;
+}
+
+void AuthedQuotes::onChangePasswordClicked()
+{
+    // RegisterForm *rw = new RegisterForm(this);
+    // rw->setWindowFlags(Qt::Dialog);
+    // rw->show();
 }

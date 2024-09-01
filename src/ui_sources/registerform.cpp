@@ -12,8 +12,6 @@ RegisterForm::RegisterForm(QWidget *parent)
 
     QObject::connect(ui->cancelBtn, &QPushButton::clicked, this, &RegisterForm::cancel);
     QObject::connect(ui->createBtn, &QPushButton::clicked, this, &RegisterForm::createUser);
-
-    QObject::connect(this, &RegisterForm::sendUser, (MainWindow*)this->parent(), &MainWindow::createNewUser);
 }
 
 RegisterForm::~RegisterForm()

@@ -35,6 +35,7 @@ signals:
     void sendUpdateAddedQuotesRequest();
     void sendUpdateFavsQuotesRequest();
 
+    void getRandomQuoteRequest();
 
 public slots:
     void favouriteQuoteFromSingleCard(SingleQuoteModel* model);
@@ -46,7 +47,8 @@ public slots:
     void quoteAddAccepted(SingleQuoteModel* data);
 
     void addOwnerAccepted(std::pair<QString, QString>);
-
+    void randomQuoteResponse(SingleQuoteModel*);
+    
 private slots:
     void onAddQuoteClicked();
     void onAddOwnerClicked();
@@ -74,6 +76,9 @@ private slots:
     // left-right buttons
     void onPreviousBtnClicked();
     void onNextBtnClickedClick();
+
+    void onChangePasswordClicked();
+    void onGetRandomQuoteClicked();
 
 private:
     std::unique_ptr<SearchTab> searchTab;

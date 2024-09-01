@@ -40,6 +40,7 @@ signals:
     void sendIfQuoteUpdatedResponse(QString);
 
     void searchQuoteResponse(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
+    void sendRandomQuote(SingleQuoteModel*);
 
 public slots:
     void getCoreTable(QuotesApi::CoreTables);
@@ -57,6 +58,8 @@ public slots:
 
     void searchQuote(const QString&);
     void searchQuoteWithFilter(const QString&, const QStringList* filters, bool negative);
+
+    void getRandomQuote();
 
 private:
     std::unique_ptr<QuotesApi> _api;

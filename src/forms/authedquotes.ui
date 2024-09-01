@@ -25,7 +25,7 @@
    <enum>QTabWidget::TabShape::Triangular</enum>
   </property>
   <property name="currentIndex">
-   <number>1</number>
+   <number>0</number>
   </property>
   <property name="iconSize">
    <size>
@@ -82,7 +82,7 @@
      </widget>
     </item>
     <item row="3" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0">
+     <layout class="QVBoxLayout" name="userActionBtnsLayout" stretch="0,0,0,0,0,0,0">
       <property name="spacing">
        <number>15</number>
       </property>
@@ -93,7 +93,17 @@
        <number>0</number>
       </property>
       <item alignment="Qt::AlignmentFlag::AlignBottom">
+       <widget class="QPushButton" name="getRandomQuoteBtn">
+        <property name="text">
+         <string>get random quote!</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="changePasswdBtn">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>change password</string>
         </property>
@@ -121,6 +131,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="addAttrBtn">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>add attribute</string>
         </property>
@@ -128,6 +141,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="addFeatureBtn">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>add feature</string>
         </property>
@@ -152,8 +168,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>98</width>
-         <height>28</height>
+         <width>600</width>
+         <height>484</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -286,6 +302,9 @@
    </layout>
   </widget>
   <widget class="QWidget" name="otherTablesTab">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <attribute name="title">
     <string>Others</string>
    </attribute>

@@ -325,6 +325,24 @@ void QuotesApiRepresenter::searchQuoteWithFilter(const QString& quote, const QSt
     emit searchQuoteResponse(values);
 }
 
+void QuotesApiRepresenter::getRandomQuote()
+{
+    
+    QNetworkReply* reply = _api->getRandomQuote();
+
+    waitAnswer(reply);
+    if (reply->error() != QNetworkReply::NoError) throw QException();
+
+    QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
+    if (!doc.isObject()) throw QException();
+
+    QJsonValue raw = doc.object();
+
+    SingleQuoteModel* answer = SingleQuoteModel::buildFromQVariant(raw.toObject().toVariantMap());
+
+    emit sendRandomQuote(answer);
+}
+
 void QuotesApiRepresenter::waitAnswer(QNetworkReply *reply)
 {
     QEventLoop loop(this);
