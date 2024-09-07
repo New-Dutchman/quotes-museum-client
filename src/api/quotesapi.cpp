@@ -114,3 +114,8 @@ NO_BODY_REQUEST(get)
 API_METHOD(getRandomQuote, "/quotes/random", void)
 QUrlQuery param;
 NO_BODY_REQUEST(get)
+
+API_METHOD(getGroupDescription, "/quotes/group-desc", const QString& group)
+QUrlQuery param;
+param.addQueryItem("group", group);
+NO_BODY_REQUEST(get)

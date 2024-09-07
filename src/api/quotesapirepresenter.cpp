@@ -340,7 +340,23 @@ void QuotesApiRepresenter::getRandomQuote()
 
     SingleQuoteModel* answer = SingleQuoteModel::buildFromQVariant(raw.toObject().toVariantMap());
 
+    delete reply;
+
     emit sendRandomQuote(answer);
+}
+
+void QuotesApiRepresenter::getGroupDescription(const QString& group)
+{
+    QNetworkReply* reply = _api->getGroupDescription(group);
+    waitAnswer(reply);
+    if (reply->error() != QNetworkReply::NoError) throw QException();
+
+    QByteArray responseBytes = reply->readAll();
+    QString desc = QString::fromUtf8(responseBytes).trimmed();
+
+    delete reply;
+
+    emit sendGroupDescription(desc);
 }
 
 void QuotesApiRepresenter::waitAnswer(QNetworkReply *reply)

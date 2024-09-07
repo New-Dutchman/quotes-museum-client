@@ -23,6 +23,7 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 
     favouriteQuotesLabel = new ClickableLabel("Favourite ones", &AuthedQuotes::updateFavsQuotesRequest, this);
     addedQuotesLabel = new ClickableLabel("Added ones", &AuthedQuotes::updateAddedQuotesRequest, this);
+    groupInfoLabel = new ClickableLabel(QString::fromUtf16(u"\U0001F6C8"), &AuthedQuotes::getGroupInfo, this);
 
     QFont font = favouriteQuotesLabel->font();
     font.setBold(true);
@@ -30,7 +31,7 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
 
     ui->quotesLabelsLayout->addWidget(favouriteQuotesLabel);
     ui->quotesLabelsLayout->addWidget(addedQuotesLabel);
-
+    ui->horizontalLayout_3->addWidget(groupInfoLabel);
     //connect(_apiThread, &QThread::finished, _apiThread, &QThread::deleteLater);
 
     ui->usernameLabel->setText(username);
@@ -91,6 +92,9 @@ AuthedQuotes::AuthedQuotes(std::shared_ptr<QuotesApiRepresenter> apiPresenter, Q
     QObject::connect(ui->getRandomQuoteBtn, &QPushButton::clicked, this, &AuthedQuotes::onGetRandomQuoteClicked);
     QObject::connect(this, &AuthedQuotes::getRandomQuoteRequest, _quotesApi.get(), &QuotesApiRepresenter::getRandomQuote);
     QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendRandomQuote, this, &AuthedQuotes::randomQuoteResponse);
+
+    QObject::connect(this, &AuthedQuotes::sendGetGroupDescriptionRequest, _quotesApi.get(), &QuotesApiRepresenter::getGroupDescription);
+    QObject::connect(_quotesApi.get(), &QuotesApiRepresenter::sendGroupDescription, this, &AuthedQuotes::groupDescriptionResponse);
 
     if (username == "John Doe")
     {
@@ -389,4 +393,18 @@ void AuthedQuotes::onChangePasswordClicked()
     // RegisterForm *rw = new RegisterForm(this);
     // rw->setWindowFlags(Qt::Dialog);
     // rw->show();
+}
+
+void AuthedQuotes::getGroupInfo(ClickableLabel<AuthedQuotes>* caller)
+{
+    emit sendGetGroupDescriptionRequest(ui->ownersComdoBox->currentText());
+}
+
+void AuthedQuotes::groupDescriptionResponse(const QString& group)
+{
+    QLabel *label = new QLabel(group, this);
+    label->setWindowFlags(Qt::Sheet);
+    label->setFont(QFont("Segou UI", 20));
+    label->setWindowTitle(ui->ownersComdoBox->currentText());
+    label->show();
 }

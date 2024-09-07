@@ -42,6 +42,8 @@ signals:
     void searchQuoteResponse(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void sendRandomQuote(SingleQuoteModel*);
 
+    void sendGroupDescription(QString);
+
 public slots:
     void getCoreTable(QuotesApi::CoreTables);
     void getQuoteCards(const QString &owner);
@@ -60,6 +62,7 @@ public slots:
     void searchQuoteWithFilter(const QString&, const QStringList* filters, bool negative);
 
     void getRandomQuote();
+    void getGroupDescription(const QString&);
 
 private:
     std::unique_ptr<QuotesApi> _api;

@@ -36,6 +36,7 @@ signals:
     void sendUpdateFavsQuotesRequest();
 
     void getRandomQuoteRequest();
+    void sendGetGroupDescriptionRequest(const QString&);
 
 public slots:
     void favouriteQuoteFromSingleCard(SingleQuoteModel* model);
@@ -48,7 +49,8 @@ public slots:
 
     void addOwnerAccepted(std::pair<QString, QString>);
     void randomQuoteResponse(SingleQuoteModel*);
-    
+    void groupDescriptionResponse(const QString&);
+
 private slots:
     void onAddQuoteClicked();
     void onAddOwnerClicked();
@@ -60,9 +62,6 @@ private slots:
     void onOwnersComdoBoxCurrentTextChanged(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void onUpdateFavsClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
     void onUpdateAddedClicked(QList<std::shared_ptr<SingleQuoteModel>>* quotes);
-    void updateAddedQuotesRequest(ClickableLabel<AuthedQuotes>*);
-    void changeLabelsState(ClickableLabel<AuthedQuotes>* caller);
-    void updateFavsQuotesRequest(ClickableLabel<AuthedQuotes>*);
 
     // void addFavourite(bool);
     void favouriteQuoteAction(bool, const QString&);
@@ -96,6 +95,12 @@ private:
 
     ClickableLabel<AuthedQuotes>* favouriteQuotesLabel;
     ClickableLabel<AuthedQuotes>* addedQuotesLabel;
+    ClickableLabel<AuthedQuotes>* groupInfoLabel;
+
+    void updateAddedQuotesRequest(ClickableLabel<AuthedQuotes>* caller);
+    void changeLabelsState(ClickableLabel<AuthedQuotes>* caller);
+    void updateFavsQuotesRequest(ClickableLabel<AuthedQuotes>*);
+    void getGroupInfo(ClickableLabel<AuthedQuotes>* caller);
 
 };
 

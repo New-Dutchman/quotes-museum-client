@@ -32,6 +32,7 @@ public:
     QNetworkReply* searchQuote(const QString&);
     QNetworkReply* searchQuote(const QString&, const QStringList* features, bool negative);
     QNetworkReply* getRandomQuote();
+    QNetworkReply* getGroupDescription(const QString& group);
 
     inline int authenticate() {return _authenticate->auth(); };
     inline QNetworkReply* addUser() {return _authenticate->addUser(); };
